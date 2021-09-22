@@ -19,7 +19,7 @@ const firebaseConfig = {
   appId: process.env.FIREBASE_APP_ID,
   measurementId: process.env.FIREBASE_MEASUREMENT
 };
-dotenv.config();
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const provider = new GoogleAuthProvider();
