@@ -7,25 +7,9 @@ import { useHistory } from "react-router-dom";
 import superagent from 'superagent'
 import Cookies from 'universal-cookie';
 import Loading from './Loading';
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import GoogleLogin from 'react-google-login';
 
+import GoogleLogin from './GoogleLogin';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBFUn0rjuuInUPciNtpKe2VzUJegFPRQVg",
-    authDomain: "tieratm-b848b.firebaseapp.com",
-    projectId: "tieratm-b848b",
-    storageBucket: "tieratm-b848b.appspot.com",
-    messagingSenderId: "34876824624",
-    appId: "1:34876824624:web:70c9fbb021b07693efa1f5",
-    measurementId: "G-0TMJ2GLEFK"
-  };
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const provider = new GoogleAuthProvider();
-  const auth = getAuth(app);
- 
 
 const SignIn = ()=> {
     const atmObject = useContext(AtmObject);
@@ -126,95 +110,7 @@ const SignIn = ()=> {
         }
     }
     `;
-    const GET_ONE_GOOGLE = gql`
-    query GET_ONE_GOOGLE($username : String!) {
-        accountNoPw(username : $username){
-          id
-          role
-          routing
-          name
-          username
-          email
-          password
-          pin
-          contact{
-            firstName
-            lastName
-            phoneNum
-            mailing{
-              streetName
-              city
-              state
-              zip
-            }
-            billing{
-              streetName
-              city
-              state
-              zip
-            }
-          }
-          balances {
-            checking {
-              acctName
-              acctNumber
-              acctType
-              balance
-            }
-            savings {
-              acctName
-              acctNumber
-              acctType
-              balance
-              interestRate
-            }
-            cards {
-              acctName
-              cardNumber
-              acctType
-              exp
-              CVV
-              pin
-              balance
-              totalBalance
-            }
-            coinWallets {
-                walletName
-                walletType
-                coins {
-                  coinName
-                  id
-                  balance
-                  activity {
-                    id
-                    dateTime
-                    type
-                    amount
-                  }
-                }
-              }
-            investments{
-                acctName
-                type
-                id
-                value
-            }
-          }
-          accountHistory {
-            transID
-            username
-            dateTime
-            info {
-              acctType
-              acctNumber
-              type
-              amount
-              newBalance
-            }
-          }
-        }
-    }
-    `;
+    
     const GET_ONE_EMP = gql`
     query GET_ONE_EMP($username : String!, $password : String!) {
         empAccountByUN(username : $username, password: $password){
@@ -236,6 +132,7 @@ const SignIn = ()=> {
     const [accountByUN,{ loading: getLoading, error : getError, data: getData }] = useLazyQuery(GET_ONE,{
         fetchPolicy: "no-cache"
       });
+    
     const [empAccountByUN,{ loading: empLoading, error : empError, data: empData }] = useLazyQuery(GET_ONE_EMP,{
         fetchPolicy: "no-cache"
       });
@@ -245,7 +142,6 @@ const SignIn = ()=> {
     useEffect(()=>{
         if(!getLoading && getData){
             if(getData.accountByUN.contact.firstName === null){
-                console.log("null")
                 history.push("/components/ContactInfo")
             }
             setAccount(getData.accountByUN)
@@ -266,52 +162,6 @@ const SignIn = ()=> {
         }
     
     },[empData])
-
-    const login = ()=>{
-        signInWithPopup(auth, provider)
-        .then((result) => {
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          console.log("result:",result)
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential.accessToken;
-          console.log( "token",token)
-          cookies.set("gapi", token, {path: "/", sameSite: 'strict'}) 
-
-          superagent
-            .post("https://atm-auth-server.herokuapp.com/loginGoogle")
-            .send({})
-            .end(function (err, res) {
-                if (err) {
-                    console.log(err);
-                } else {
-                if(res.text === "Username or password incorrect"){
-                    document.getElementById('username-error').innerHTML = "Username or password incorrect"
-                    return
-                }
-                    let tokenArr = res.body.accessToken.split('.')
-                    cookies.set("tokenHead", `${tokenArr[0]}.${tokenArr[1]}`, {path: "/", sameSite: 'strict'})
-                    cookies.set('tokenSig', tokenArr[2], {path: "/", sameSite: 'strict', secure: true})
-                    accountByUN({variables :{}})
-                }
-            }); 
-          setSelectedDiv('home-nav-div')
-          setSelected('Home')         
-          // The signed-in user info.
-          const user = result.user;
-          // ...
-        }).catch((error) => {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // The email of the user's account used.
-          const email = error.email;
-          // The AuthCredential type that was used.
-          const credential = GoogleAuthProvider.credentialFromError(error);
-          // ...
-        });
-      
-      }
-    
 
     const createAccount = ()=>{
         history.push('/components/CreateAccount')
@@ -408,7 +258,7 @@ const SignIn = ()=> {
                                         <div className= "error-signin"><ErrorMessage name="password" /></div>
                                     </div>
                                     <button className="submit-btn" type="submit" disabled = {!(formik.dirty && formik.isValid) || getLoading || empLoading}>Login</button>
-                                    or use <button onClick={login}>Google</button>
+                                     {!isEmployee && <GoogleLogin />}
                                 </Form>
                                 </>
                                 }

@@ -291,7 +291,6 @@ function FindAccount() {
         }else if(fieldEdit === 'phone'){
             editAccountPhone({variables : {id: account.id, phoneNum: editData}})
         }else if(fieldEdit === 'address'){
-            console.log("working on it", editData.split(' '))
             let street = `${editData.split(' ')[0]} ${editData.split(' ')[1]} ${editData.split(' ')[2]}`
             let cityComma = editData.split(' ')[3]
             let city = cityComma.split(',')[0]
@@ -317,7 +316,6 @@ function FindAccount() {
 
     useEffect(async()=>{
         if(!loading && data){
-            console.log("checking on account info:",account)
             setAccount(data.accountNoPW)
             setAccountFound(true)
             document.getElementById('idInput').placeholder = data.accountNoPW.id

@@ -154,7 +154,6 @@ function CreateAccount() {
     }, [data])
 
     useEffect(()=>{
-        //numberGen({variables:{id:"accounts"}})
         if(isEmployee){
             setAccount({})
         }
@@ -261,7 +260,6 @@ function CreateAccount() {
                     let tokenArr = res.body.accessToken.split('.')
                     cookies.set("tokenHead", `${tokenArr[0]}.${tokenArr[1]}`, {path: "/", sameSite: 'strict'})
                     cookies.set('tokenSig', tokenArr[2], {path: "/", sameSite: 'strict', secure: true})
-                    console.log("number", newRouting, "equation", routingEq)
                     editNumberGen({variables:{id: "accounts", number: newSavings, equation: acctNumberEq}})
                     editNumberGen({variables:{id: "routing", number: newRouting, equation: routingEq}})
                     history.push('/components/Success') 

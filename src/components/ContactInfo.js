@@ -69,8 +69,7 @@ function ContactInfo() {
 
     useEffect(()=>{
         console.log("account",account)
-        if(account.contact.firstName != null){    
-            console.log("account exists!!!")    
+        if(account.contact.firstName != null){     
             initialValues = {
                 firstName: account.contact.firstName,
                 lastName: account.contact.lastName,
@@ -99,7 +98,6 @@ function ContactInfo() {
             document.getElementById('billingState').value = account.contact.billing.state
             document.getElementById('billingZip').value = account.contact.billing.zip
         }else{
-            console.log("else empty")
             initialValues = {
                 firstName:"",
                 lastName:"",

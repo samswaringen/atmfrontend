@@ -83,7 +83,6 @@ function BuyCoin({ coin, wallet, walletIndex }) {
 
     const buy = ()=>{
             setClicked(!clicked)
-            console.log("price",coin)
             setPrice(Number(coin.priceUsd))
             setIsConfirm(false)
     }

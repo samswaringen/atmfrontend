@@ -343,7 +343,6 @@ function AddAccount() {
                 }
                 break;
             case "coinWallets":
-                console.log("working")
                 addNewCoinWallet({variables : {id: account.id, acctType: acctType,  walletName: accountName, walletType: acctLevel}})
                 setAccount(account, account.balances.coinWallets.push({walletName: accountName, walletType: acctLevel, coins:[]}))
                 history.push('/components/Success')

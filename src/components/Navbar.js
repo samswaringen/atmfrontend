@@ -24,13 +24,11 @@ function Navbar() {
             setIsEmployee(true)
             setIsCustomer(false)
             setIsATM(false)
-            console.log("set employee as true")
         }
         if(item === 'Online Banking'){
             setIsEmployee(false)
             setIsCustomer(true)
             setIsATM(false)
-            console.log("set employee as false")
         }
         if(item === "Create Account"){
             setIsEmpCreate(false)
