@@ -128,6 +128,9 @@ function Navbar() {
                     <Nav.Item>
                         <Link to="/components/AccountHistory" onClick = {handleNav}><div className="nav-title" id="Account History"><div className="inner-nav-div-title" id="account history-nav-div">Account History</div></div></Link>
                     </Nav.Item>
+                    <Nav.Item>
+                        <Link to="/components/ContactInfo" onClick = {handleNav}><div className="nav-title" id="Contact Info"><div className="inner-nav-div-title" id="contact info-nav-div">Contact Info</div></div></Link>
+                    </Nav.Item>
                     <Nav.Item >
                         <Link to="/components/Logout"  onClick = {handleNav}><div className="nav-title" id="Logout"><div className="inner-nav-div-title" id="logout-nav-div">Logout</div></div></Link>
                     </Nav.Item>

@@ -20,16 +20,14 @@ function Withdraw() {
 
     return (
         <Card id="withdraw-div">
-            <h2 className = "account-balance">Account Balance</h2>
-            
-            <div>Checking: {account.balances.checking.map((item, index)=><div>{item.acctName}: ${Number(item.balance).toFixed(2)}</div>)}</div>
-            <div >Savings: {account.balances.savings.map((item, index)=><div>{item.acctName}: ${Number(item.balance).toFixed(2)}</div>)}</div>
+            <div className="withdraw-title-div"><h2 className = "account-balance">Account Balances</h2></div>
+            <div className="account-list-div">
+                <div>Checking {account.balances.checking.map((item, index)=><div className="account-and-balance">{item.acctName}: ${Number(item.balance).toFixed(2)}</div>)}</div>
+                <div >Savings {account.balances.savings.map((item, index)=><div className="account-and-balance">{item.acctName}: ${Number(item.balance).toFixed(2)}</div>)}</div>
+            </div>
 
             <button className = "withdraw-btn" onClick = {routeQuick}>Quick Cash</button>
-            <button className = "withdraw-btn" onClick = {routeOther}>Other Amount</button>   
-            <div id = "recent-withdraw-div">
-                Recent Withdrawals<RecentTrans deposit="" withdraw="withdraw" />    
-            </div>   
+            <button className = "withdraw-btn" onClick = {routeOther}>Other Amount</button>    
         </Card>
     )
 };

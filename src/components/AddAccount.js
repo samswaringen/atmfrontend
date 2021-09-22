@@ -162,29 +162,21 @@ function AddAccount() {
                 setDebitEq(numData.numberGen.equation)
             }
         }
-        console.log("numData", numData)
+
         
     },[numData])
 
     useEffect(()=>{
         if(!numLoading && numData){
-            console.log("account#", acctNumber)
             numberGen({variables:{id:"credit"}})
             }
     }, [acctNumber])
 
     useEffect(()=>{
         if(!numLoading && numData){
-            console.log("creditnumber", creditNumber)
             numberGen({variables:{id:"debit"}})
             }
     },[creditNumber])
-
-    useEffect(()=>{
-        if(!numLoading && numData){
-            console.log("debitnumber", debitNumber)
-            }
-    },[debitNumber])
 
     const createAccount = (acct)=>{
         setSelected(true)
@@ -417,15 +409,16 @@ function AddAccount() {
             { isConfirm && (acctType != "cards") &&
                 <div>
                     <h4>Please give the account a name: </h4><br/>
-                    <input type="text" placeholder="Account Name" onChange={handleName}></input><br/>
-                    <button type="button" onClick={addAccount}>Add Account</button><button  type="button" onClick={goBack}>Go Back</button>
+                    <input type="text" className="account-name-input" placeholder="Account Name" onChange={handleName}></input><br/>
+                    <button type="button" onClick={addAccount} className="add-account-btn">Add Account</button><button  type="button" onClick={goBack} className="go-back-btn">Go Back</button>
                     
                 </div>
             }
             {isConfirm && (acctType === "cards") &&
-                <div>
-                    <input type="text" placeholder="Account Name" onChange={handleName}></input>
-                    <input type="number" placeholder="Enter 4-8 Digit Pin" onChange={handlePin}></input>
+                <div className="card-input-div">
+                    <div>Enter Account Name and Pin:</div>
+                    <input className="account-name-input" type="text" placeholder="Account Name" onChange={handleName}></input>
+                    <input className="account-name-input" type="number" placeholder="Enter 4-8 Digit Pin" onChange={handlePin}></input>
                     {(acctLevel === "debit") && 
                         <Dropdown>
                             <Dropdown.Toggle>
@@ -438,7 +431,7 @@ function AddAccount() {
                             </Dropdown.Menu>
                         </Dropdown>
                     }
-                    <button type="button" onClick={addAccount}>Add Account</button>
+                    <button type="button" onClick={addAccount} className="add-account-btn">Add Account</button><button  type="button" onClick={goBack} className="go-back-btn">Go Back</button>
                 </div>
             }
         </Card>

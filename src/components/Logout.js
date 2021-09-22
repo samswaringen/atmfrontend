@@ -5,7 +5,7 @@ import Cookies from 'universal-cookie';
 
 function Logout() {
     const atmObject = useContext(AtmObject)
-    const { setIsVerified, setSelectedDiv, setSelected, isEmployee, setIsCustomer, setAccount, setIsATM, setIsAdmin } = atmObject
+    const { setIsVerified, setSelectedDiv, setSelected, isEmployee, setIsCustomer, setAccount, setEmployee, setIsATM, setIsAdmin , setIsEmpCreate} = atmObject
     const history = useHistory()
 
     const cookies = new Cookies();
@@ -18,7 +18,9 @@ function Logout() {
     setIsCustomer(true)
     setIsATM(false)
     setIsAdmin(false)
+    setIsEmpCreate(false)
     setAccount('')
+    setEmployee('')
     if(!isEmployee){
         document.getElementById('Home').classList.add('marble')
         document.getElementById('Home').classList.add('black-border-bottom')

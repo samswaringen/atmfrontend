@@ -5,10 +5,10 @@ import { AtmObject } from '../App'
 import { useHistory } from "react-router-dom";
 
 function ContactInfo() {
-    const atmObject = useContext(AtmObject);
-    const { account, setAccount, isEmployee} = atmObject
+        const atmObject = useContext(AtmObject);
+        const { account, setAccount, isEmployee} = atmObject
 
-    const history = useHistory()
+        const history = useHistory()
 
     const EDIT_CONTACT_INFO = gql`
     mutation EDIT_CONTACT_INFO($id: String, $firstName: String,$lastName: String,$phoneNum: Int,$mailing: String,$mailingCity: String,$mailingState: String,$mailingZip: Int,$billing: String,$billingCity: String,$billingState: String,$billingZip: Int){
@@ -65,9 +65,67 @@ function ContactInfo() {
     const [editContactInfo,{loading,error,data}] = useMutation(EDIT_CONTACT_INFO)
     const [editAccountPin,{loading:loadPin,error:errorPin,data:dataPin}] = useMutation(EDIT_ACCOUNT_PIN)
 
+    let initialValues = {}
+
+    useEffect(()=>{
+        console.log("account",account)
+        if(account.contact.firstName != null){    
+            console.log("account exists!!!")    
+            initialValues = {
+                firstName: account.contact.firstName,
+                lastName: account.contact.lastName,
+                phoneNum: account.contact.phoneNum,
+                mailing: account.contact.mailing.streetName,
+                mailingCity: account.contact.mailing.city,
+                mailingState: account.contact.mailing.state,
+                mailingZip: account.contact.mailing.zip,
+                billing: account.contact.billing.streetName,
+                billingCity: account.contact.billing.city,
+                billingState: account.contact.billing.state,
+                billingZip: account.contact.billing.zip,
+                pin: "",
+                confirmPin: ""
+            }
+            document.getElementById('pin').placeholder = account.pin
+            document.getElementById('firstName').value = account.contact.firstName
+            document.getElementById('lastName').value = account.contact.lastName
+            document.getElementById('phoneNum').value = account.contact.phoneNum
+            document.getElementById('mailing').value = account.contact.mailing.streetName
+            document.getElementById('mailingCity').value = account.contact.mailing.city
+            document.getElementById('mailingState').value = account.contact.mailing.state
+            document.getElementById('mailingZip').value = account.contact.mailing.zip
+            document.getElementById('billing').value = account.contact.billing.streetName
+            document.getElementById('billingCity').value = account.contact.billing.city
+            document.getElementById('billingState').value = account.contact.billing.state
+            document.getElementById('billingZip').value = account.contact.billing.zip
+        }else{
+            console.log("else empty")
+            initialValues = {
+                firstName:"",
+                lastName:"",
+                phoneNum:"",
+                mailing:"",
+                mailingCity:"",
+                mailingState:"",
+                mailingZip:"",
+                billing:"",
+                billingCity:"",
+                billingState:"",
+                billingZip:"",
+                pin: "",
+                confirmPin: ""
+            }
+        }
+    },[])
+
+    const handleSame = (e)=>{
+        document.getElementById('mailing').value = document.getElementById('billing').value
+        document.getElementById('mailingCity').value = document.getElementById('billingCity').value
+        document.getElementById('mailingState').value = document.getElementById('billingState').value
+        document.getElementById('mailingZip').value = document.getElementById('billingZip').value
+    }
+
     const onSubmit = async(values)=>{
-        console.log("values:",values)
-        console.log("account in contact", account)
         await editContactInfo({variables:{id: account.id,
             firstName: values.firstName,
             lastName: values.lastName,
@@ -118,21 +176,7 @@ function ContactInfo() {
         }
         return errors
     }
-    const initialValues = {
-        firstName:"",
-        lastName:"",
-        phoneNum:"",
-        mailing:"",
-        mailingCity:"",
-        mailingState:"",
-        mailingZip:"",
-        billing:"",
-        billingCity:"",
-        billingState:"",
-        billingZip:"",
-        pin: "",
-        confirmPin: ""
-    }
+
 
     return (
         <div>
@@ -148,42 +192,47 @@ function ContactInfo() {
                                 <h2 id="create-title">Enter Contact Info</h2> 
                                 <Form>
                                 <div className= "field-div">
-                                        <Field name= "pin" type='number' placeholder="Enter Pin 4-8 chars" ></Field>
+                                        Enter Pin:
+                                        <Field id = "pin" name= "pin" type='number' placeholder="Enter Pin 4-8 chars" ></Field>
                                         <div className= "error"><ErrorMessage name = 'pin'/></div>
                                     </div>
                                     <div className= "field-div">
-                                        <Field name= "confirmPin" type='number' placeholder="Confirm Pin" ></Field>
+                                        Confirm Pin:
+                                        <Field id = "confirmPin" name= "confirmPin" type='number' placeholder="Confirm Pin" ></Field>
                                         <div className= "error"><ErrorMessage name = 'confirmPin'/></div>
                                     </div>
                                     <div className= "field-div">
-                                        <Field name= "firstName" type='input' placeholder="First Name" ></Field>
+                                        First Name:
+                                        <Field id ="firstName" name= "firstName" type='input' placeholder="First Name" ></Field>
                                         <div className= "error"><ErrorMessage name = 'username'/></div>
                                     </div>
                                     <div className= "field-div">
-                                        <Field name= "lastName" type='input' placeholder="Last Name" ></Field>
+                                        Last Name:
+                                        <Field id = "lastName" name= "lastName" type='input' placeholder="Last Name" ></Field>
                                         <div className= "error"><ErrorMessage name = 'username'/></div>
                                     </div>
                                     <div className= "field-div">
-                                        <Field name= "phoneNum" type='input' placeholder="Phone Number" ></Field>
+                                        Phone Number:
+                                        <Field id = "phoneNum" name= "phoneNum" type='input' placeholder="Phone Number" ></Field>
                                         <div className= "error"><ErrorMessage name = 'username'/></div>
                                     </div>
-                                    <div className= "field-div">                          
-                                        <Field name= "billing" type='input' placeholder="Billing Address" ></Field>                          
-                                        <Field name= "billingCity" type='input' placeholder="City" ></Field>                     
-                                        <Field name= "billingState" type='input'placeholder="State" ></Field>                          
-                                        <Field name= "billingZip" type='input' placeholder="Zip" ></Field>
+                                    <div className= "field-div">
+                                        Billing:                    
+                                        <Field name= "billing" id = "billing" type='input' placeholder="Billing Address" ></Field>                          
+                                        <Field name= "billingCity" id = "billingCity" type='input' placeholder="City" ></Field>                     
+                                        <Field name= "billingState" id = "billingState" type='input'placeholder="State" ></Field>                          
+                                        <Field name= "billingZip" id = "billingZip" type='input' placeholder="Zip" ></Field>
                                         <div className= "error"><ErrorMessage name = 'username'/><ErrorMessage name = 'username'/><ErrorMessage name = 'username'/><ErrorMessage name = 'username'/></div>
                                     </div>
-                                    <div className= "field-div">                            
-                                        <Field name= "mailing" type='input' placeholder="Mailing Address" ></Field>                                                             
-                                        <Field name= "mailingCity" type='input'  placeholder="City" ></Field>                                                              
-                                        <Field name= "mailingState" type='input' placeholder="State" ></Field>                          
-                                        <Field name= "mailingZip" type='input' placeholder="Zip" ></Field>
+                                    <div className= "field-div">   
+                                         Mailing:                        
+                                        <Field name= "mailing" id = "mailing" type='input' placeholder="Mailing Address" ></Field>                                                             
+                                        <Field name= "mailingCity" id = "mailingCity" type='input'  placeholder="City" ></Field>                                                              
+                                        <Field name= "mailingState" id = "mailingState" type='input' placeholder="State" ></Field>                          
+                                        <Field name= "mailingZip" id = "mailingZip" type='input' placeholder="Zip" ></Field>
+                                        <button id = "sameDiv" name= "sameDiv" type="button" onClick={handleSame}>Same as Billing</button>
                                         <div className= "error"><ErrorMessage name = 'username'/><ErrorMessage name = 'username'/><ErrorMessage name = 'username'/><ErrorMessage name = 'username'/></div>
-                                    </div>
-                                    <div className= "field-div"> 
-                                        Same as Billing
-                                        <Field type="checkbox"></Field>
+                                        
                                     </div>
                                     
                                     <button id= "create-submit" className="submit-btn" type="submit" disabled = {!(formik.dirty && formik.isValid)}>Submit</button>

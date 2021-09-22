@@ -11,9 +11,7 @@ import SellCoin from './SellCoin';
 function CoinWallets() {
     const atmObject = useContext(AtmObject)
     const {account} = atmObject
-
     const [clicked, setClicked] = useState(false)
-    const [isFiat, setIsFiat] = useState(true)
     const [price, setPrice] = useState(0)
     const [coinAmount, setCoinAmount] = useState(0)
     const [coinData, setCoinData] = useState([])
@@ -27,7 +25,7 @@ function CoinWallets() {
     const getCoinName = async()=>{
         var config = {
             method: 'get',
-            url: 'https://api.coincap.io/v2/assets/',
+            url: 'https://api.coincap.io/v2/assets'
           };
           
         let reqData = await axios(config)
@@ -76,7 +74,7 @@ function CoinWallets() {
             <div id="coin-wallet-list">
                 <h3>List of Wallets</h3>
                 {account.balances.coinWallets.map((item, index)=>
-                    <div onClick={()=>selectWallet(item,index)}>
+                    <div className = "coin-wallet-select" onClick={()=>selectWallet(item,index)}>
                         {item.walletName}
                     </div>
                 )}
@@ -89,6 +87,10 @@ function CoinWallets() {
                     </div>
                 )}
             </div>
+            { !selected &&
+                <div id="coins-available"><h3 className="coin-wallet-title">Select Wallet </h3>
+                And your Coins will show here</div>
+            }
             { selected &&
                 <div id="coins-available"><h3 className="coin-wallet-title">Coins</h3>{account.balances.coinWallets[walletIndex].coins.map((coin)=>
                     <div className="coin-in-wallet">

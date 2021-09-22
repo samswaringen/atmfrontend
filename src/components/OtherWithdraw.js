@@ -90,6 +90,9 @@ function OtherWithdraw() {
         setAccountIndex(index)
         setIsSelected(true)
     }
+    const goBack =()=>{
+        setIsSelected(false)
+    }
 
 
     return (
@@ -102,15 +105,13 @@ function OtherWithdraw() {
             </>
             }{ isSelected &&
             <>
-                <h2 className = "account-balance">Account Balance<br/><span className='balance-amount'>${account.balances[accountSelected][accountIndex].balance.toLocaleString('en-us')}</span></h2>
-                <h3>Withdraw Amount: <span className='balance-amount'>${withdraw}</span></h3>
+                <h4 className = "account-balance"><span className="account-selected-title">Account Selected<br/></span><span className='balance-amount'>{account.balances[accountSelected][accountIndex].acctName} {account.balances[accountSelected][accountIndex].acctNumber}</span></h4>
+                <h3 className = "account-balance"><span className="account-selected-title">Account Balance<br/></span><span className='balance-amount'>${account.balances[accountSelected][accountIndex].balance.toLocaleString('en-us')}</span></h3>
                 <div id = "other-withdraw">
-                    <input type = 'number' id = 'withdraw' onChange = {handleWithdraw}></input>
-                    <button id = 'other-button'onClick = {withdrawMoney} disabled = {!valueEntered}>Other Amount</button>
+                    <span className="font-size-20">$</span> <input type = 'number' id = 'withdraw' onChange = {handleWithdraw} placeholder="Withdraw Amount"></input>
+                    <button id = 'other-button'onClick = {withdrawMoney} disabled = {!valueEntered}>Withdraw</button>
                 </div>
-                <div>
-                    Recent Withdrawals<RecentTrans deposit="" withdraw="withdraw" />    
-                </div> 
+                <div type="button" className = "change-account-other" onClick={goBack}>&larr; Change Account</div>
             </>
             }
         </Card>

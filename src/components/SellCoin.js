@@ -62,7 +62,6 @@ function SellCoin({ coinData, coin, wallet, setIsLoading, walletIndex }) {
 
     const sell=()=>{
         setClicked(!clicked)
-        console.log(coin)
         let sellCoin = coinData.filter(item=>item.name === coin.coinName)
         console.log("sellcoin:",sellCoin[0])
         setPrice(Number(sellCoin[0].priceUsd))
@@ -79,14 +78,11 @@ function SellCoin({ coinData, coin, wallet, setIsLoading, walletIndex }) {
     }
 
     const getCapital = ()=>{
-        console.log("wallet:",wallet.coins)
         let transID = makeid(30)
         let newDate = new Date()
         let coinIndex, acctCoin;
         let sellCoin = coinData.filter(item=>item.name === coin.coinName)
         wallet.coins.map((item,index)=>{
-            //console.log("AcctCoin", acctCoin, "coinIndex", coinIndex)
-            console.log("item.coinName", item.coinName, "sellCoin.name", sellCoin[0].name)
             if(item.coinName === sellCoin[0].name){
                 acctCoin = item
                 coinIndex = index
@@ -94,7 +90,6 @@ function SellCoin({ coinData, coin, wallet, setIsLoading, walletIndex }) {
             }
         })
         let newAmount = account.balances.checking[accountIndex].balance + Number(capitalAmount)
-        console.log("variables:","id", account.id, "balance" , newAmount, "transID", transID, "username", account.username, "dateTime",newDate, "type", "coin sale", "amount", capitalAmount, "newBalance", newAmount, "acctType", "checking", "acctIndex", accountIndex, "acctNumber", account.balances.checking[accountIndex].acctNumber)
         addTransaction({variables : {
             id : account.id, 
             balance : newAmount, 
@@ -108,7 +103,6 @@ function SellCoin({ coinData, coin, wallet, setIsLoading, walletIndex }) {
             acctIndex: accountIndex, 
             acctNumber: account.balances.checking[accountIndex].acctNumber
         }})
-        console.log("addTrans successful")
         let coinBalance = Number(coin.balance) - Number(coinAmount)
         editCoin({variables : {
             id:account.id,

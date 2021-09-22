@@ -24,7 +24,6 @@ function Home() {
             cookies.remove('tokenHead', {path: '/',sameSite: 'strict'})
             cookies.remove('tokenSig', {path: '/',sameSite: 'strict', secure: true})
         }
-        console.log("isEmployee?", isEmployee)
         setIsEmployee(false)
         !isVerified && document.getElementById('online banking-nav-div').classList.add('title-background')
     },[])
@@ -40,6 +39,7 @@ function Home() {
                 }
                 <div id="recent-transactions">Recent Transactions <RecentTrans withdraw={'withdraw'} deposit={"deposit"}/></div>
                 </div>
+                <div id="divider"></div>
                 <div id="account-balances-div">
                     <h4 id = "account-balance">Account Balances</h4>
                     <h5 id = "account-balance">Checking </h5>

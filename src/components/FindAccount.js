@@ -37,6 +37,10 @@ function FindAccount() {
     const [accountFound, setAccountFound] = useState(false)
     const [accountsFound, setAccountsFound] = useState(false)
     const [employeesFound, setEmployeesFound] = useState(false)
+    const [addType, setAddType] = useState('Address:')
+    const [checkSelect, setCheckSelect] = useState('')
+    const [saveSelect, setSaveSelect] = useState('')
+
 
     const history = useHistory()
 
@@ -131,8 +135,8 @@ function FindAccount() {
     `;
 
     const EDIT_ACCOUNT_NAME = gql`
-    mutation EDIT_ACCOUNT_NAME($id: String!, $name: String!){
-        editAccountName(id:$id, name:$name){
+    mutation EDIT_ACCOUNT_NAME($id: String!, $firstName: String!, $lastName: String!){
+        editAccountName(id:$id, firstName:$firstName, lastName:$lastName){
             name
         }
     }
@@ -145,12 +149,34 @@ function FindAccount() {
         }
     }
     `
+    const EDIT_ACCOUNT_PHONE = gql`
+    mutation EDIT_ACCOUNT_PHONE($id: String!, $phoneNum: Int){
+        editAccountPhone(id:$id, phoneNum:$phoneNum){
+            name
+        }
+    }
+    `
+    const EDIT_ADDRESS = gql`
+    mutation EDIT_ADDRESS($id: String!, $street: String, $city: String, $state: String, $zip: Int, $type: String){
+        editAddress(id:$id, input: {streetName: $street, city:$city, state:$state, zip:$zip}, type:$type){
+            name
+        }
+    }
+    `
 
     const [editAccountName, {loading:nameLoading, error:nameError, data:nameData}] = useMutation(EDIT_ACCOUNT_NAME,{
         fetchPolicy: "no-cache"
         })
 
     const [editAccountEmail, {loading:emailLoading, error:emailError, data:emailData}] = useMutation(EDIT_ACCOUNT_EMAIL,{
+        fetchPolicy: "no-cache"
+        })
+    
+    const [editAccountPhone, {loading:phoneLoading, error:phoneError, data:phoneData}] = useMutation(EDIT_ACCOUNT_PHONE,{
+        fetchPolicy: "no-cache"
+        })
+            
+    const [editAddress, {loading:addressLoading, error:addressError, data:addressData}] = useMutation(EDIT_ADDRESS,{
         fetchPolicy: "no-cache"
         })
 
@@ -163,7 +189,6 @@ function FindAccount() {
     const initialValues = {username: ""}
 
     const onSubmit = (values)=>{
-        console.log("checking account data:",account)
         setEmployeesFound(false)
         setAccountsFound(false)
         document.getElementById('idInput').value = ''
@@ -191,7 +216,6 @@ function FindAccount() {
     }
 
     const showAllAccts = ()=>{
-        console.log("working accounts")
         setAccountsFound(true)
         setEmployeesFound(false)
         setAccountFound(false)
@@ -199,27 +223,27 @@ function FindAccount() {
     }
 
     const showAllEmps = ()=>{
-        console.log("working employees")
         setEmployeesFound(true)
         setAccountsFound(false)
         setAccountFound(false)
     }
 
     const handleEdit = (id, field)=>{
-        console.log("target:",id)
         setFieldEdit(field)
-        setEditData(document.getElementById(`${id}`).value)
+        if(id === 'addressInput'){
+            setEditData(`${document.getElementById(`addressInput`).value} ${document.getElementById(`cityStateInput`).value}`)
+        }else{
+            setEditData(document.getElementById(`${id}`).value)
+        }
         setIsMakingSure(true)
     }
 
     const handleWithdraw = (e)=>{
-        console.log("target:",e.target)
         setIsEmpWithdraw(true)
         history.push("/components/EnterPin")
     }
 
     const handleDeposit = (e)=>{
-        console.log("target:",e.target)
         setIsEmpDeposit(true)
         history.push("/components/EnterPin")
     }
@@ -234,9 +258,22 @@ function FindAccount() {
         if(acctType === "checking"){
             document.getElementById('checkingInput').placeholder = acct.balance
             document.getElementById('checkingNumInput').value = acct.acctNumber
+            setCheckSelect(acct.acctName)
         }else if (acctType === "savings"){
             document.getElementById('savingsInput').placeholder = acct.balance
             document.getElementById('savingsNumInput').value = acct.acctNumber
+            setSaveSelect(acct.acctName)
+        }
+    }
+
+    const handleAddType = (type)=>{
+        setAddType(type)
+        if(type === 'billing'){
+            document.getElementById('addressInput').value = data.accountNoPW.contact.billing.streetName
+            document.getElementById('cityStateInput').value = `${data.accountNoPW.contact.billing.city}, ${data.accountNoPW.contact.billing.state} ${data.accountNoPW.contact.billing.zip}`
+        }else if(type =='mailing'){
+            document.getElementById('addressInput').value = data.accountNoPW.contact.mailing.streetName
+            document.getElementById('cityStateInput').value = `${data.accountNoPW.contact.mailing.city}, ${data.accountNoPW.contact.mailing.state} ${data.accountNoPW.contact.mailing.zip}`
         }
     }
 
@@ -246,9 +283,21 @@ function FindAccount() {
 
     const confirmEdit = ()=>{
         if(fieldEdit === 'name'){
-            editAccountName({variables : {id: account.id, name: editData}})
+            let firstName = editData.split(" ")[0]
+            let lastName = editData.split(" ")[1]
+            editAccountName({variables : {id: account.id, firstName: firstName, lastName: lastName }})
         }else if(fieldEdit === 'email'){
             editAccountEmail({variables : {id: account.id, email: editData}})
+        }else if(fieldEdit === 'phone'){
+            editAccountPhone({variables : {id: account.id, phoneNum: editData}})
+        }else if(fieldEdit === 'address'){
+            console.log("working on it", editData.split(' '))
+            let street = `${editData.split(' ')[0]} ${editData.split(' ')[1]} ${editData.split(' ')[2]}`
+            let cityComma = editData.split(' ')[3]
+            let city = cityComma.split(',')[0]
+            let state = editData.split(' ')[4]
+            let zip = Number(editData.split(' ')[5])
+            editAddress({variables : {id: account.id, street: street, city: city, state: state, zip: zip, type: addType}})
         }
         setIsMakingSure(false)
     }
@@ -268,19 +317,30 @@ function FindAccount() {
 
     useEffect(async()=>{
         if(!loading && data){
+            console.log("checking on account info:",account)
             setAccount(data.accountNoPW)
             setAccountFound(true)
             document.getElementById('idInput').placeholder = data.accountNoPW.id
             document.getElementById('routingInput').value = data.accountNoPW.routing
-            document.getElementById('nameInput').value = `${data.accountNoPW.contact.firstName} ${data.accountNoPW.contact.lastName}`
             document.getElementById('emailInput').value = data.accountNoPW.email
             document.getElementById('checkingInput').value = data.accountNoPW.balances.checking.balance
             document.getElementById('savingsInput').value = data.accountNoPW.balances.savings.balance
             document.getElementById('checkingNumInput').value = data.accountNoPW.balances.checking.acctNumber
             document.getElementById('savingsNumInput').value = data.accountNoPW.balances.savings.acctNumber
-            document.getElementById('phoneInput').value = data.accountNoPW.contact.phoneNum
-            document.getElementById('addressInput').value = data.accountNoPW.contact.billing.streetName
-            document.getElementById('cityStateInput').value = `${data.accountNoPW.contact.billing.city}, ${data.accountNoPW.contact.billing.state} ${data.accountNoPW.contact.billing.zip}`
+            if(data.accountNoPW.contact.firstName === null){
+                document.getElementById('nameInput').value = "None Set"
+                document.getElementById('phoneInput').value = "None Set"
+                document.getElementById('addressInput').value = "None Set"
+                document.getElementById('cityStateInput').value = "None Set"
+            }else{
+                setAddType("billing")
+                document.getElementById('nameInput').value = `${data.accountNoPW.contact.firstName} ${data.accountNoPW.contact.lastName}`
+                document.getElementById('phoneInput').value = data.accountNoPW.contact.phoneNum
+                document.getElementById('addressInput').value = data.accountNoPW.contact.billing.streetName
+                document.getElementById('cityStateInput').value = `${data.accountNoPW.contact.billing.city}, ${data.accountNoPW.contact.billing.state} ${data.accountNoPW.contact.billing.zip}`
+            }
+
+
         }
     },[data])
 
@@ -288,13 +348,14 @@ function FindAccount() {
         setIsEmpWithdraw(false)
         setIsEmpTransfer(false)
         setIsEmpDeposit(false)
-        if(account.id){
+        if(account.id !=null){
             document.getElementById('usernameInput').placeholder = account.username   
             document.getElementById('idInput').placeholder = account.id
             document.getElementById('routingInput').placeholder = account.routing
             document.getElementById('nameInput').placeholder = account.name
             document.getElementById('emailInput').placeholder = account.email
         }else{
+            document.getElementById('usernameInput').placeholder = "Enter Username"   
             document.getElementById('idInput').placeholder = `Account ID`
             document.getElementById('routingInput').placeholder = "Routing #"
             document.getElementById('nameInput').placeholder = `Account Name`
@@ -337,8 +398,8 @@ function FindAccount() {
                                     <>
                                     <div className="col1 row5">
                                         <Dropdown>
-                                            <Dropdown.Toggle>
-                                                Checking Accounts:
+                                            <Dropdown.Toggle style={{backgroundColor:'black', border:'1px solid black', width:'175px'}}>
+                                                Checking {checkSelect}
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 {!loading && data &&
@@ -359,8 +420,8 @@ function FindAccount() {
                                     <>
                                     <div className="col1 row7">
                                     <Dropdown>
-                                            <Dropdown.Toggle>
-                                                Savings Accounts:
+                                            <Dropdown.Toggle style={{backgroundColor:'black', border:'1px solid black', width:'175px'}}>
+                                                Savings {saveSelect}
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 {!loading && data &&
@@ -389,7 +450,17 @@ function FindAccount() {
                                         <div className="col1 row11">Phone#:</div>
                                         <Field name="phone" className="col2 row11" id="phoneInput" type='input' placeholder="Phone Number"></Field>
                                         <button className="submit-btn col3 row11" type="submit" onClick = {()=>handleEdit('phoneInput', 'phone')}>Edit</button>
-                                    <div className="col1 row12">Address:</div>
+                                    <div className="col1 row12">
+                                    <Dropdown>
+                                            <Dropdown.Toggle style={{backgroundColor:'black', border:'1px solid black', width:'175px'}}>
+                                                {addType}
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={()=>handleAddType('mailing')}>Mailing</Dropdown.Item>
+                                                <Dropdown.Item onClick={()=>handleAddType('billing')}>Billing</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </div>
                                         <Field name="address" className="col2 row12" id="addressInput" type='input' placeholder="Account Address"></Field>
                                         <Field name="cityState" className="col2 row13" id="cityStateInput" type='input' placeholder="Account City/State"></Field>
                                         <button className="submit-btn col3 row13" type="submit" onClick = {()=>handleEdit('addressInput', 'address')}>Edit</button>

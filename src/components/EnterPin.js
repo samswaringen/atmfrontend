@@ -126,7 +126,6 @@ function EnterPin() {
 
     useEffect(()=>{
         if(!loading && data){
-            console.log("data:",data)
             setAccount(data.accountByPin)
             setIsVerified(true)
             history.push("/components/Home")
@@ -188,7 +187,6 @@ function EnterPin() {
                         if (err) {
                         console.log(err);
                         }else {
-                            console.log("res for sign in", res)
                             if(res.text === "Username or pin incorrect"){
                                 document.getElementById('username-error').innerHTML = "Username or pin incorrect"
                                 setPinCode([])
@@ -239,7 +237,7 @@ function EnterPin() {
                             <button key = '<' className = "keypad-btn" onClick = {undoPin}>&lt;</button>
                         </div>
                         <div id = "submit-pin">
-                            <button id = "submit-btn" onClick = {enterPin}>Submit</button>
+                            <button id = "submit-btn" onClick = {enterPin} disabled = {loading}>Submit</button>
                         </div>
                     </div>
             </div>   

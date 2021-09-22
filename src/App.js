@@ -23,6 +23,7 @@ import Transfer from './components/Transfer';
 import AddAccount from './components/AddAccount';
 import CoinWallets from './components/CoinWallets';
 import ContactInfo from './components/ContactInfo';
+import LoggedInAccount from './components/LoggedInAccount';
 
 
 export const AtmObject = React.createContext()
@@ -98,7 +99,9 @@ function ATM() {
                                isEmpTransfer:isEmpTransfer,
                                setIsEmpTransfer:setIsEmpTransfer
                             }}>
+                            
                             <Navbar />
+                            <LoggedInAccount />
                             <Card id = "atm-screen">
                                 <Card id="interactive">
                                     <Route exact path="">

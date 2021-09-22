@@ -59,13 +59,10 @@ function QuickCash() {
     if((account.balances[accountSelected][accountIndex].balance - amount) < 0){
         return alert(`You don't have the funds!`)
     }else{
-        console.log("account",account)
         let newAmount = account.balances[accountSelected][accountIndex].balance - Number(amount);
-        console.log("newAmount",newAmount)
         let transID = makeid(30)
         let newDate = new Date()
         let transType = "withdraw*QC"
-        console.log("varaiables:","id:", account.id, "balance:", newAmount, "transID :", transID, "username :", account.username, "dateTime:", newDate, "type:", transType, "amount:", Number(amount), "newBalance: ",newAmount, "acctIndex", accountIndex)
         addTransaction({variables:{id : account.id, balance : newAmount, transID:transID, username: account.username, dateTime: newDate, type: "withdraw*QC", amount: Number(amount), newBalance: newAmount, acctType: accountSelected, acctIndex: accountIndex, acctNumber: account.balances[accountSelected][accountIndex].acctNumber}})
         addToAllData({variables:{transID:transID, username:account.username, dateTime: newDate, type: "withdraw*QC", amount: Number(amount), newBalance: newAmount, acctType: accountSelected, acctNumber: account.balances[accountSelected][accountIndex].acctNumber}})
         setAccount(account, account.balances[accountSelected][accountIndex].balance = newAmount);
@@ -80,6 +77,10 @@ function QuickCash() {
         setAccountIndex(index)
         setIsSelected(true)
     }
+    const goBack =()=>{
+        setIsSelected(false)
+    }
+
 
 
     return (
@@ -92,9 +93,11 @@ function QuickCash() {
             </>
         }{ isSelected &&
             <>
-            <h2 className = "account-balance">Account Balance<br/><span className='balance-amount'>${account.balances[accountSelected][accountIndex].balance.toLocaleString('en-us')}</span></h2>
-            <h4 className = "account-balance">Account Number:<br/><span className='balance-amount'>{account.balances[accountSelected][accountIndex].acctNumber}</span></h4>
+            <h4 className = "account-balance"><span className="account-selected-title">Account Selected<br/></span><span className='balance-amount'>{account.balances[accountSelected][accountIndex].acctName} {account.balances[accountSelected][accountIndex].acctNumber}</span></h4>
+            <div type="button" className = "change-account-quick" onClick={goBack}><p>&larr; Change Account</p></div>
+            <h3 className = "account-balance"><span className="account-selected-title">Account Balance<br/></span><span className='balance-amount'>${account.balances[accountSelected][accountIndex].balance.toLocaleString('en-us')}</span></h3>
                 <div id= "quickcash-div">
+                    Select an amount:
                     <div>
                         <button className = "quick-btn" value= '20' onClick={withdrawMoney}>$20</button>
                         <button className = "quick-btn" value= '80' onClick={withdrawMoney}>$80</button>
@@ -108,9 +111,6 @@ function QuickCash() {
                         <button className = "quick-btn" value= '200' onClick={withdrawMoney}>$200</button>
                     </div> 
                 </div>
-                <div id="recent-withdraw-quick">
-                    Recent Withdrawals<RecentTrans deposit="" withdraw="withdraw" />    
-                </div> 
             </>
         }
         </Card>

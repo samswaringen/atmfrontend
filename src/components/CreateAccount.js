@@ -29,6 +29,7 @@ function CreateAccount() {
         email:"", 
         password: "",
         verifyPassword: "",
+        role: "Choose Role"
     }
 
     const GET_ONE = gql`
@@ -194,7 +195,9 @@ function CreateAccount() {
     }
 
     const onSubmit = (values)=>{
+        console.log("values:",values)
         let id = makeid(15)
+        let empId = makeid(20)
         let newRouting = routing + routingEq
         let newChecking = acctNumber + acctNumberEq
         let newSavings = newChecking + 1
@@ -212,8 +215,8 @@ function CreateAccount() {
         }
         if(isEmpCreate){
             input = {
-                id :values.id,
-                dateTime :values.dateTime,
+                id: empId,
+                dateTime: newDate,
                 role: values.role,
                 name: values.name,
                 username: values.username,
@@ -227,12 +230,6 @@ function CreateAccount() {
                 if (err) {
                   console.log(err);
                 } else {
-                    console.log("res inside emp create working!!!!", res.req._data.input.username)
-                    let tokenArr = res.body.accessToken.split('.')
-                    cookies.set("tokenHead", `${tokenArr[0]}.${tokenArr[1]}`, {path: "/", sameSite: 'strict'})
-                    cookies.set('tokenSig', tokenArr[2], {path: "/", sameSite: 'strict', secure: true})
-                    console.log('success!')
-                    
                 }
             })       
         }else if(isEmployee){
@@ -243,13 +240,8 @@ function CreateAccount() {
                 if (err) {
                   console.log(err);
                 } else {
-                    console.log("res inside emp create", res.req._data.input.username)
-                    let tokenArr = res.body.accessToken.split('.')
-                    cookies.set("tokenHead", `${tokenArr[0]}.${tokenArr[1]}`, {path: "/", sameSite: 'strict'})
-                    cookies.set('tokenSig', tokenArr[2], {path: "/", sameSite: 'strict', secure: true})
                     editNumberGen({variables:{id: "accounts", number: newSavings, equation: acctNumberEq }})
                     editNumberGen({variables:{id: "routing", number: newRouting, equation: routingEq}})
-                    console.log('success!')
                     accountNoPW({variables: {username: res.req._data.input.username}})
                     
                 }
@@ -269,6 +261,7 @@ function CreateAccount() {
                     let tokenArr = res.body.accessToken.split('.')
                     cookies.set("tokenHead", `${tokenArr[0]}.${tokenArr[1]}`, {path: "/", sameSite: 'strict'})
                     cookies.set('tokenSig', tokenArr[2], {path: "/", sameSite: 'strict', secure: true})
+                    console.log("number", newRouting, "equation", routingEq)
                     editNumberGen({variables:{id: "accounts", number: newSavings, equation: acctNumberEq}})
                     editNumberGen({variables:{id: "routing", number: newRouting, equation: routingEq}})
                     history.push('/components/Success') 
@@ -321,6 +314,18 @@ function CreateAccount() {
                                     <Field id = "create-username" name="username" type='input' placeholder="Create Username" ></Field>
                                     <div className= "error"><ErrorMessage name = 'username'/><ErrorMessage name = 'checkUser'/></div>
                                 </div>
+                                { isEmpCreate && <>
+                                    <div className= "field-div">
+                                        <Field id = "emp-role-select" name="role" as="select">
+                                            <option value="choose">ChooseRole</option>
+                                            <option value="employee">Employee</option>
+                                            <option value="manager">Manager</option>
+                                            <option value="admin">Admin</option>
+                                        </Field>
+                                        <div className= "error"><ErrorMessage name = 'role'/><ErrorMessage name = 'checkRole'/></div>
+                                    </div>
+                                </>
+                                }
                                 <div className= "field-div">
                                     <Field id = "create-name" name="name" type='input' placeholder="Greeting Name"></Field>
                                     <div className= "error"><ErrorMessage name = 'name'/></div>
@@ -330,11 +335,21 @@ function CreateAccount() {
                                     <div className= "error"><ErrorMessage name = 'email'/></div>
                                 </div>
                                 <div className= "field-div">
-                                    <Field id = "create-password" name="password" type={showPw ? 'text' : 'password'} placeholder="Create Password" ></Field><div id = "showPassSpan" type="button" onClick={showHidden}>Show</div>
+                                    <Field id = "create-password" name="password" type={showPw ? 'text' : 'password'} placeholder="Create Password" ></Field>
+                                    { isEmpCreate ?
+                                        <div id = "showPassSpan" type="button" onClick={showHidden}>Show</div>
+                                        :
+                                        <div id = "showPassSpanCust" type="button" onClick={showHidden}>Show</div>
+                                    }
                                     <div className= "error"><ErrorMessage name = 'password'/></div>
                                 </div>
                                 <div className= "field-div">
-                                    <Field id = "create-verify" name="verifyPassword" type={showVerPw ? 'text' : 'password'} placeholder="Verify Password"></Field><span id = "showPassVerSpan" type="button" onClick={showVerHidden}>Show</span>
+                                    <Field id = "create-verify" name="verifyPassword" type={showVerPw ? 'text' : 'password'} placeholder="Verify Password"></Field>
+                                    { isEmpCreate ?
+                                        <div id = "showPassVerSpan" type="button" onClick={showVerHidden}>Show</div>
+                                        :
+                                        <div id = "showPassSpanVerCust" type="button" onClick={showVerHidden}>Show</div>
+                                    }
                                     <div className= "error"><ErrorMessage name = 'verifyPassword'/></div>
                                 </div>
                                 <button id= "create-submit" className="submit-btn" type="submit" disabled = {!(formik.dirty && formik.isValid)}>Submit</button>

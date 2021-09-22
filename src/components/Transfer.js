@@ -26,8 +26,6 @@ function Transfer() {
 
     let history = useHistory()
 
-    console.log("account for transfer", account.balances['checking'].balance)
-
     const TRANSFER_TO_SOMEONE = gql`
         mutation TRANSFER_TO_SOMEONE($id: String!, $dateTime: String, $routing: Int!, $acctNumber: Float!, $amount: Float!, $fromAcct: Int!, $fromAcctType: String!, $transID: String!, $fromAcctIndex: Int! ){
             transferToSomeone(id: $id, dateTime: $dateTime, routing: $routing, acctNumber: $acctNumber, amount:$amount, fromAcct: $fromAcct, fromAcctType: $fromAcctType, transID: $transID, fromAcctIndex: $fromAcctIndex){
@@ -208,15 +206,19 @@ function Transfer() {
                     <>
                     <div>
                     From
-                        <Dropdown>
-                            <Dropdown.Toggle>
+                        <Dropdown >
+                            <Dropdown.Toggle style={{backgroundColor:'black', border:'1px solid black', width:'175px'}}>
                                 {accountFrom}: ${(accountFrom != "Account") && account.balances[accountFrom][accountFromIndex].balance}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                {
-                                    account.balances.checking.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('checking', 'from', index)}>Checking: {item.acctName}</Dropdown.Item>)
-                                }{
-                                    account.balances.savings.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('savings', 'from', index)}>Savings: {item.acctName}</Dropdown.Item>)
+                                {<>
+                                    {<Dropdown.Header>Checking</Dropdown.Header>}
+                                    {account.balances.checking.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('checking', 'from', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item>)}
+                                </>
+                                }{<>
+                                {<Dropdown.Header>Savings</Dropdown.Header>}
+                                    {account.balances.savings.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('savings', 'from', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item>)}
+                                    </>
                                 }{ (account.balances.cards) &&
                                     account.balances.cards.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('cards', 'from', index)}>Card: {item.acctName}</Dropdown.Item>)
                                 }{ (account.balances.coins) &&
@@ -230,23 +232,27 @@ function Transfer() {
                     </div>
                     <div>
                     To
-                        <Dropdown>
-                            <Dropdown.Toggle>
+                        <Dropdown >
+                            <Dropdown.Toggle style={{backgroundColor:'black', border:'1px solid black', width:'175px'}}>
                             {accountTo}: ${(accountTo != "Account") && account.balances[accountTo][accountToIndex].balance}
                             </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {
-                                    account.balances.checking.map((item,index)=> 
+                            <Dropdown.Menu >
+                                {<>
+                                    {<Dropdown.Header>Checking</Dropdown.Header>}
+                                   {account.balances.checking.map((item,index)=> 
                                     <>
-                                        {(index === accountFromIndex && accountFrom === "checking") ? <div></div> : <Dropdown.Item onClick = {()=>selectAccount('checking', 'to', index)}>Checking: {item.acctName}</Dropdown.Item> }
+                                        {(index === accountFromIndex && accountFrom === "checking") ? <div></div> : <Dropdown.Item onClick = {()=>selectAccount('checking', 'to', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item> }
                                     </>
-                                    )
-                                }{
-                                    account.balances.savings.map((item,index)=>
+                                    )}
+                                    </>
+                                }{<>
+                                    {<Dropdown.Header>Savings</Dropdown.Header>}
+                                    {account.balances.savings.map((item,index)=>
                                     <>
-                                        {(index === accountFromIndex && accountFrom === "savings") ? <div></div> : <Dropdown.Item onClick = {()=>selectAccount('savings', 'to', index)}>Savings: {item.acctName}</Dropdown.Item> }
+                                        {(index === accountFromIndex && accountFrom === "savings") ? <div></div> : <Dropdown.Item onClick = {()=>selectAccount('savings', 'to', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item> }
                                     </>
-                                        )
+                                        )}
+                                    </>
                                 }{ (account.balances.cards) &&
                                     account.balances.cards.map((item,index)=>
                                     <>
@@ -268,7 +274,7 @@ function Transfer() {
                                 }
                             </Dropdown.Menu>
                         </Dropdown>
-                    </div>
+                    </div><br/>
                     <input type="number" placeholder="Amount" onChange={handleAmount}></input><br/>
                     <button type="submit" onClick={confirmTransfer}>Submit</button>
                     <button type="button" onClick={goBack}>Go Back</button>
@@ -280,14 +286,16 @@ function Transfer() {
                     <div>
                     From
                         <Dropdown>
-                            <Dropdown.Toggle>
+                            <Dropdown.Toggle style={{backgroundColor:'black', border:'1px solid black', width:'175px'}}>
                             {accountFrom}: ${(accountFrom != "Account") && account.balances[accountFrom][accountFromIndex].balance}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                {
-                                    account.balances.checking.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('checking', 'from', index)}>Checking: {item.acctName}</Dropdown.Item>)
-                                }{
-                                    account.balances.savings.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('savings', 'from', index)}>Savings: {item.acctName}</Dropdown.Item>)
+                                {<> {<Dropdown.Header>Checking</Dropdown.Header>}
+                                    {account.balances.checking.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('checking', 'from', index)}><strong>{item.acctName}</strong> Balance: {item.balance}</Dropdown.Item>)}
+                                </>
+                                }{<> {<Dropdown.Header>Checking</Dropdown.Header>}
+                                   {account.balances.savings.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('savings', 'from', index)}><strong>{item.acctName}</strong> Balance: {item.balance}</Dropdown.Item>)}
+                                    </>
                                 }{ (account.balances.cards) &&
                                     account.balances.cards.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('cards', 'from', index)}>Card: {item.acctName}</Dropdown.Item>)
                                 }{ (account.balances.coins) &&

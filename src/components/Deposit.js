@@ -87,11 +87,8 @@ function Deposit() {
     const handleCheck = async()=>{
         if(document.getElementById('file').files[0]){
             let res = await client.images.upload(document.getElementById('file').files[0]);
-            console.log("res url",res)
             setFileLink(res.file)
         }
-        
-        console.log("selected file", document.getElementById('file').files[0])
         setSelectedFile(document.getElementById('file').files[0])
     }
 
@@ -115,12 +112,14 @@ function Deposit() {
 
     const goBack =()=>{
         setIsSelected(false)
+        setIsReady(false)
+        setIsCash(false)
+        setIsCheck(false)
     }
 
  
     const ocrSpace = require('ocr-space-api-wrapper')
     const getOCR = async()=>{
-        console.log("starting up super duper check analyzer!")
         var FormData = require('form-data');
         var data = new FormData();
         data.append('language', 'eng');
@@ -140,19 +139,20 @@ function Deposit() {
         };
        let res = await axios(config)
        setTextArr(res.data.ParsedResults[0].ParsedText.replace( /\r\n/g, " " ).split(" "))
-       console.log("res ocr",res.data.ParsedResults[0].ParsedText.replace( /\r\n/g, " " ).split(" "))
         
     }
 
     useEffect(()=>{
-        console.log("selected file:",selectedFile)
+        console.log('isAtm:',isATM)
+    },[])
+
+    useEffect(()=>{
         if(selectedFile != ""){
             setIsFile(true)
         } 
     },[selectedFile])
     
     useEffect(()=>{
-        console.log("text array:",textArr)
         let checkAmount;
         let index = 0;
         if(textArr.length>0){
@@ -172,7 +172,6 @@ function Deposit() {
             addToAllData({variables:{transID:transID, username:account.username, dateTime: newDate, type: "deposit", amount: deposit, newBalance: newAmount, acctType: accountSelected, acctNumber: account.balances[accountSelected][accountIndex].acctNumber}})
             setAccount(account, account.balances[accountSelected][accountIndex].balance = newAmount);
             setAccount(account, account.accountHistory.push({transID:transID, username:account.username, dateTime: newDate, info : {acctNumber: account.balances[accountSelected][accountIndex].acctNumber, acctType: accountSelected, type: "deposit", amount: deposit, newBalance: newAmount}}));
-            console.log(account.accountHistory)
             setDeposit(0);
             setIsReady(false)
             setIsCash(false)
@@ -193,16 +192,12 @@ function Deposit() {
             addToAllData({variables:{transID:transID, username:account.username, dateTime: newDate, type: "deposit", amount: deposit, newBalance: newAmount, acctType: accountSelected, acctNumber: account.balances[accountSelected][accountIndex].acctNumber}})
             setAccount(account, account.balances[accountSelected][accountIndex].balance = newAmount);
             setAccount(account, account.accountHistory.push({transID:transID, username:account.username, dateTime: newDate, info : {acctNumber: account.balances[accountSelected][accountIndex].acctNumber, acctType: accountSelected, type: "deposit", amount: deposit, newBalance: newAmount}}));
-            console.log(account.accountHistory)
             setDeposit(0);
             setIsReady(false)
             setIsCash(false)
             setIsCheck(false)
         }
-        console.log("depositing:",document.getElementById('deposit').value)
-        console.log("accountIndex", accountIndex)
         if((document.getElementById('deposit').value) === ' '){
-            console.log('working')
             alert("Your deposit is Not a Number")
             return
         }
@@ -226,8 +221,29 @@ function Deposit() {
         }{ isSelected &&
             <>
                 <h2 className = "account-balance">Account Balance<br/><span className='balance-amount'>${(account.balances[accountSelected][accountIndex].balance).toLocaleString('en-us')}</span></h2>
-                <div type="button" onClick={goBack}>Change Account</div>
-               { isATM || isEmployee && <>
+                <div type="button" className = "change-account-deposit" onClick={goBack}><p>&larr; Change Account</p></div>
+               { isATM && <>
+                        Deposit
+                        {!isReady && <>
+                            <button id="depositByCash" onClick={()=>handleType("cash")}> By Cash</button>
+                            <button id="depositByCheck" onClick={()=>handleType("check")}> By Check</button>
+                        </>
+                        }
+                        { isReady && <>
+                            {isCheck && <button id="depositByCash" onClick={()=>handleType("cash")}> By Cash</button>}
+                            {isCash && <button id="depositByCheck" onClick={()=>handleType("check")}> By Check</button>}
+                            </>
+                        }
+
+                    { isCheck &&  <>
+                        <label htmlFor="file">Upload image of check</label>
+                        <input type="file" id="file" name="file" onChange={handleCheck}/>
+                        <div><img src={fileLink} width={'300px'}></img></div>
+                        </>
+                    }
+                    </>
+                }
+                { isEmployee && <>
                         Deposit
                         <button id="depositByCash" onClick={()=>handleType("cash")}> By Cash</button>
                         <button id="depositByCheck" onClick={()=>handleType("check")}> By Check</button>
@@ -241,14 +257,12 @@ function Deposit() {
                     </>
                 }
                 { isCheck && isReady && <div id="deposit-amount-div">
-                    <h3>Deposit Amount: <span className='balance-amount'>${deposit}</span></h3>
-                    <input type = 'number' id = 'deposit' onChange = {handleDeposit}></input>
+                <span className="font-size-20">$</span><input type = 'number' id = 'deposit' onChange = {handleDeposit} placeholder="Deposit Amount"></input>
                     <button type = 'button' id = 'deposit-button' onClick = {depositMoney} disabled = {!valueEntered}>Deposit</button>
                 </div>
                 }
                 { isCash && isReady && <div id="deposit-amount-div">
-                    <h3>Deposit Amount: <span className='balance-amount'>${deposit}</span></h3>
-                    <input type = 'number' id = 'deposit' onChange = {handleDeposit}></input>
+                <span className="font-size-20">$</span><input type = 'number' id = 'deposit' onChange = {handleDeposit} placeholder="Deposit Amount"></input>
                     <button type = 'button' id = 'deposit-button' onClick = {depositMoney} >Deposit</button>
                 </div>
                 }
@@ -257,16 +271,11 @@ function Deposit() {
                     <input type="file" id="file" name="file" onChange={handleCheck}/>
                     <div><img src={fileLink} width={'300px'}></img></div>
                     <div id="deposit-amount-div">
-                    <h3>Deposit Amount: <span className='balance-amount'>${deposit}</span></h3>
-                    <input type = 'number' id = 'deposit' onChange = {handleDeposit}></input>
+                    <span className="font-size-20">$</span><input type = 'number' id = 'deposit' onChange = {handleDeposit} placeholder="Deposit Amount"></input>
                     <button type = 'button' id = 'deposit-button' onClick = {depositMoney} >Deposit</button>
                 </div>
                     </>
                 }
-                
-                <div id="recent-deposit">
-                    Recent deposits <RecentTrans deposit="deposit" withdraw=""/>
-                </div>
             </>
         }
             
