@@ -8,17 +8,16 @@ import googlelogo from '../googlelogo.png'
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { makeid } from './idgenerator';
-import dotenv from 'dotenv'
 
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: "tieratm-b848b.firebaseapp.com",
-  projectId: "tieratm-b848b",
-  storageBucket: "tieratm-b848b.appspot.com",
-  messagingSenderId: "34876824624",
-  appId: "1:34876824624:web:70c9fbb021b07693efa1f5",
-  measurementId: "G-0TMJ2GLEFK"
+  authDomain: process.env.FIREBASE_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE,
+  messagingSenderId: process.env.FIREBASE_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT
 };
 dotenv.config();
 // Initialize Firebase
