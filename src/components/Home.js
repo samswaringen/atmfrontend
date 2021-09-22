@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import RecentTrans from "./RecentTrans"
 import Card from 'react-bootstrap/Card'
 import Cookies from 'universal-cookie';
+import superagent from 'superagent'
 
 function Home() {
     const atmObject = useContext(AtmObject);
@@ -19,14 +20,16 @@ function Home() {
     }
 
 
-    useEffect(()=>{ 
+    useEffect(()=>{         
         if(!isVerified){
             cookies.remove('tokenHead', {path: '/',sameSite: 'strict'})
             cookies.remove('tokenSig', {path: '/',sameSite: 'strict', secure: true})
         }
         setIsEmployee(false)
         !isVerified && document.getElementById('online banking-nav-div').classList.add('title-background')
+
     },[])
+
     return (
         <Card id = "home">
             {isVerified ? 

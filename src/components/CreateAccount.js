@@ -212,6 +212,7 @@ function CreateAccount() {
             chkAcctNumber: newChecking,
             savAcctNumber: newSavings
         }
+        let google = false
         if(isEmpCreate){
             input = {
                 id: empId,
@@ -234,7 +235,7 @@ function CreateAccount() {
         }else if(isEmployee){
             superagent
             .post("https://atm-auth-server.herokuapp.com/createuser")
-            .send({input})
+            .send({input, google})
             .end(function (err, res) {
                 if (err) {
                   console.log(err);

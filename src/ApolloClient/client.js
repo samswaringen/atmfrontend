@@ -7,7 +7,7 @@ const cookies = new Cookies();
 
 const httpLink = new HttpLink({
   uri: "https://atm-graphql-server.herokuapp.com/graphql",
-  
+  //uri: "http://localhost:9001/graphql"
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {

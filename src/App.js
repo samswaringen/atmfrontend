@@ -49,6 +49,7 @@ function ATM() {
     const [isEmpWithdraw, setIsEmpWithdraw] = useState(false)
     const [isEmpDeposit, setIsEmpDeposit] = useState(false)
     const [isEmpTransfer,setIsEmpTransfer] = useState(false)
+    
 
     return (
         <ApolloProvider client={client}>

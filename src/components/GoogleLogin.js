@@ -8,9 +8,11 @@ import googlelogo from '../googlelogo.png'
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { makeid } from './idgenerator';
+import dotenv from 'dotenv'
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBFUn0rjuuInUPciNtpKe2VzUJegFPRQVg",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "tieratm-b848b.firebaseapp.com",
   projectId: "tieratm-b848b",
   storageBucket: "tieratm-b848b.appspot.com",
@@ -18,6 +20,7 @@ const firebaseConfig = {
   appId: "1:34876824624:web:70c9fbb021b07693efa1f5",
   measurementId: "G-0TMJ2GLEFK"
 };
+dotenv.config();
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const provider = new GoogleAuthProvider();
@@ -198,6 +201,7 @@ function GoogleLogin() {
       cookies.set("gapi", token, {path: "/", sameSite: 'strict'}) 
       superagent
         .post("https://atm-auth-server.herokuapp.com/loginGoogle")
+        //.post("http://localhost:9002/loginGoogle")
         .send({email: result.user.email})
         .end(function (err, res) {
             if (err) {
@@ -252,10 +256,12 @@ function GoogleLogin() {
       password:makeid(20),
       chkAcctNumber: newChecking,
       savAcctNumber: newSavings
-  }
+    }
+    let google = true
     superagent
           .post("https://atm-auth-server.herokuapp.com/createuser")
-          .send({input})
+          //.post("http://localhost:9002/createuser")
+          .send({input, google} )
           .end(function (err, res) {
               if (err) {
                 console.log(err);
