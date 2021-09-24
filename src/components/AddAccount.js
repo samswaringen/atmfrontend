@@ -147,7 +147,7 @@ function AddAccount() {
 
     useEffect(()=>{
         numberGen({variables:{id:"accounts"}})
-    },[])
+    })
 
     useEffect(()=>{
         if(!numLoading && numData){
@@ -195,6 +195,8 @@ function AddAccount() {
                 break;
             case "coinWallets":
                 setIsCoinWallet(true)
+                break;
+            default:
                 break;
         }
     }
@@ -269,6 +271,8 @@ function AddAccount() {
                 setIsConfirm(true)
                 setIsCoinWallet(false)
                 break;
+            default:
+                break;
         }
     }
 
@@ -310,6 +314,8 @@ function AddAccount() {
                         setAccount(account, account.balances.savings.push({ acctName: accountName, acctNumber : newAcctNumber, acctType: acctLevel, balance : 0, interestRate : 0.25}))
                         history.push('/components/Success')
                         break;
+                    default:
+                        break;
                 }
                 break;
             case "cards":
@@ -330,15 +336,19 @@ function AddAccount() {
                         setAccount(account, account.balances.cards.push({acctName: accountName, cardNumber: newCreditNumber, acctLink: accountNumForLink, acctType: acctLevel, exp: exp, CVV: cvv, pin: Number(pin), balance: balanceAllowed, totalBalance: balanceAllowed}))
                         history.push('/components/Success')
                         break;
+                    default:
+                        break;
                 }
                 break;
             case "investment":
                 switch(acctLevel){
                     case "basic":
                         break;
-                    case "basic":
+                    case "premium":
                         break;
-                    case "basic":
+                    case "ultra":
+                        break;
+                    default:
                         break;
                 }
                 break;
@@ -346,6 +356,8 @@ function AddAccount() {
                 addNewCoinWallet({variables : {id: account.id, acctType: acctType,  walletName: accountName, walletType: acctLevel}})
                 setAccount(account, account.balances.coinWallets.push({walletName: accountName, walletType: acctLevel, coins:[]}))
                 history.push('/components/Success')
+                break;
+            default:
                 break;
         }
     }
@@ -405,7 +417,7 @@ function AddAccount() {
                     <div className = "add-account-items" type="button" onClick={goBack}><div className = "add-account-items-inner">Go Back</div></div>
                 </div> 
             }
-            { isConfirm && (acctType != "cards") &&
+            { isConfirm && (acctType !== "cards") &&
                 <div>
                     <h4>Please give the account a name: </h4><br/>
                     <input type="text" className="account-name-input" placeholder="Account Name" onChange={handleName}></input><br/>
@@ -425,7 +437,7 @@ function AddAccount() {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 {
-                                    account.balances.checking.map(((item,index)=><Dropdown.Item onClick={()=>selectAccount(index)}>{item.acctName}</Dropdown.Item>))
+                                    account.balances.checking.map(((item,index)=><Dropdown.Item key = {index} onClick={()=>selectAccount(index)}>{item.acctName}</Dropdown.Item>))
                                 }
                             </Dropdown.Menu>
                         </Dropdown>

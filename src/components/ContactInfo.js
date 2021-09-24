@@ -68,7 +68,6 @@ function ContactInfo() {
     let initialValues = {}
 
     useEffect(()=>{
-        console.log("account",account)
         if(account.contact.firstName != null){     
             initialValues = {
                 firstName: account.contact.firstName,

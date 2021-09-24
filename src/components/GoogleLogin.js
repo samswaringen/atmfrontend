@@ -12,7 +12,6 @@ import dotenv from 'dotenv';
 
 dotenv.config()
 
-console.log(".env",process.env)
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
@@ -184,7 +183,6 @@ function GoogleLogin() {
 
   useEffect(()=>{
     if(!emailLoading && emailData){
-      console.log("emailData",emailData)
         if(emailData.accountByEmail.contact.firstName === null){
             history.push("/components/ContactInfo")
         }
@@ -197,10 +195,8 @@ function GoogleLogin() {
     signInWithPopup(auth, provider)
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
-      console.log("result:",result)
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
-      console.log( "result.user.email",result.user.email)
       cookies.set("gapi", token, {path: "/", sameSite: 'strict'}) 
       superagent
         .post("https://atm-auth-server.herokuapp.com/loginGoogle")
@@ -272,7 +268,6 @@ function GoogleLogin() {
                   let tokenArr = res.body.accessToken.split('.')
                   cookies.set("tokenHead", `${tokenArr[0]}.${tokenArr[1]}`, {path: "/", sameSite: 'strict'})
                   cookies.set('tokenSig', tokenArr[2], {path: "/", sameSite: 'strict', secure: true})
-                  //console.log("number", newRouting, "equation", routingEq)
                   editNumberGen({variables:{id: "accounts", number: newSavings, equation: acctNumberEq}})
                   editNumberGen({variables:{id: "routing", number: newRouting, equation: routingEq}})
                   accountByEmail({variables :{email:email}})

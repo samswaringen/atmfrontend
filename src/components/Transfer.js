@@ -213,18 +213,18 @@ function Transfer() {
                             <Dropdown.Menu>
                                 {<>
                                     {<Dropdown.Header>Checking</Dropdown.Header>}
-                                    {account.balances.checking.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('checking', 'from', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item>)}
+                                    {account.balances.checking.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('checking', 'from', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item>)}
                                 </>
                                 }{<>
                                 {<Dropdown.Header>Savings</Dropdown.Header>}
-                                    {account.balances.savings.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('savings', 'from', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item>)}
+                                    {account.balances.savings.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('savings', 'from', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item>)}
                                     </>
                                 }{ (account.balances.cards) &&
-                                    account.balances.cards.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('cards', 'from', index)}>Card: {item.acctName}</Dropdown.Item>)
+                                    account.balances.cards.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('cards', 'from', index)}>Card: {item.acctName}</Dropdown.Item>)
                                 }{ (account.balances.coins) &&
-                                    account.balances.coins.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('coins', 'from', index)}>Coin: {item.coinName}</Dropdown.Item>)
+                                    account.balances.coins.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('coins', 'from', index)}>Coin: {item.coinName}</Dropdown.Item>)
                                 }{ (account.balances.investments) &&
-                                    account.balances.investments.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('investments', 'from', index)}>Investment: {item.acctName}</Dropdown.Item>)
+                                    account.balances.investments.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('investments', 'from', index)}>Investment: {item.acctName}</Dropdown.Item>)
                                 }
                             </Dropdown.Menu>
                         </Dropdown>
@@ -241,7 +241,7 @@ function Transfer() {
                                     {<Dropdown.Header>Checking</Dropdown.Header>}
                                    {account.balances.checking.map((item,index)=> 
                                     <>
-                                        {(index === accountFromIndex && accountFrom === "checking") ? <div></div> : <Dropdown.Item onClick = {()=>selectAccount('checking', 'to', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item> }
+                                        {(index === accountFromIndex && accountFrom === "checking") ? <div key = {index}></div> : <Dropdown.Item key = {index} onClick = {()=>selectAccount('checking', 'to', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item> }
                                     </>
                                     )}
                                     </>
@@ -249,26 +249,26 @@ function Transfer() {
                                     {<Dropdown.Header>Savings</Dropdown.Header>}
                                     {account.balances.savings.map((item,index)=>
                                     <>
-                                        {(index === accountFromIndex && accountFrom === "savings") ? <div></div> : <Dropdown.Item onClick = {()=>selectAccount('savings', 'to', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item> }
+                                        {(index === accountFromIndex && accountFrom === "savings") ? <div key = {index}></div> : <Dropdown.Item key = {index} onClick = {()=>selectAccount('savings', 'to', index)}><strong>{item.acctName}</strong> Balance: ${item.balance}</Dropdown.Item> }
                                     </>
                                         )}
                                     </>
                                 }{ (account.balances.cards) &&
                                     account.balances.cards.map((item,index)=>
                                     <>
-                                        {(index === accountFromIndex && accountFrom === "cards") ? <div></div> : <Dropdown.Item onClick = {()=>selectAccount('cards', 'to', index)}>Card: {item.acctName}</Dropdown.Item> }
+                                        {(index === accountFromIndex && accountFrom === "cards") ? <div key = {index}></div> : <Dropdown.Item key = {index} onClick = {()=>selectAccount('cards', 'to', index)}>Card: {item.acctName}</Dropdown.Item> }
                                     </>
                                     )
                                 }{ (account.balances.coins) &&
                                     account.balances.coins.map((item,index)=>
                                     <>
-                                        {(index === accountFromIndex && accountFrom === "coins") ? <div></div> : <Dropdown.Item onClick = {()=>selectAccount('coins', 'to', index)}>Coin: {item.coinName}</Dropdown.Item>}
+                                        {(index === accountFromIndex && accountFrom === "coins") ? <div key = {index}></div> : <Dropdown.Item key = {index} onClick = {()=>selectAccount('coins', 'to', index)}>Coin: {item.coinName}</Dropdown.Item>}
                                     </>
                                     )
                                 }{ (account.balances.investments) &&
                                     account.balances.investments.map((item,index)=>
                                     <>
-                                        {(index === accountFromIndex && accountFrom === "investments") ? <div></div> : <Dropdown.Item onClick = {()=>selectAccount('investments', 'to', index)}>Investment: {item.acctName}</Dropdown.Item>}
+                                        {(index === accountFromIndex && accountFrom === "investments") ? <div key = {index}></div> : <Dropdown.Item key = {index} onClick = {()=>selectAccount('investments', 'to', index)}>Investment: {item.acctName}</Dropdown.Item>}
                                     </>
                                     )
                                 }
@@ -291,17 +291,17 @@ function Transfer() {
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 {<> {<Dropdown.Header>Checking</Dropdown.Header>}
-                                    {account.balances.checking.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('checking', 'from', index)}><strong>{item.acctName}</strong> Balance: {item.balance}</Dropdown.Item>)}
+                                    {account.balances.checking.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('checking', 'from', index)}><strong>{item.acctName}</strong> Balance: {item.balance}</Dropdown.Item>)}
                                 </>
                                 }{<> {<Dropdown.Header>Checking</Dropdown.Header>}
-                                   {account.balances.savings.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('savings', 'from', index)}><strong>{item.acctName}</strong> Balance: {item.balance}</Dropdown.Item>)}
+                                   {account.balances.savings.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('savings', 'from', index)}><strong>{item.acctName}</strong> Balance: {item.balance}</Dropdown.Item>)}
                                     </>
                                 }{ (account.balances.cards) &&
-                                    account.balances.cards.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('cards', 'from', index)}>Card: {item.acctName}</Dropdown.Item>)
+                                    account.balances.cards.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('cards', 'from', index)}>Card: {item.acctName}</Dropdown.Item>)
                                 }{ (account.balances.coins) &&
-                                    account.balances.coins.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('coins', 'from', index)}>Coin: {item.coinName}</Dropdown.Item>)
+                                    account.balances.coins.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('coins', 'from', index)}>Coin: {item.coinName}</Dropdown.Item>)
                                 }{ (account.balances.investments) &&
-                                    account.balances.investments.map((item,index)=><Dropdown.Item onClick = {()=>selectAccount('investments', 'from', index)}>Investment: {item.acctName}</Dropdown.Item>)
+                                    account.balances.investments.map((item,index)=><Dropdown.Item key = {index} onClick = {()=>selectAccount('investments', 'from', index)}>Investment: {item.acctName}</Dropdown.Item>)
                                 }
                             </Dropdown.Menu>
                         </Dropdown>

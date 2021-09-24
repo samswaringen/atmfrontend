@@ -44,7 +44,7 @@ function EmployeeList() {
         },[data])
     return (
         <div>
-            {accts.map((item)=><div className="fourColGrid"><div className="col1">{item.username}</div> <div className="col2">{item.id}</div> <div className="col3">{item.name}</div><div>{(new Date(item.workHistory[0].dateTime).getMonth())+1}/{new Date(item.workHistory[0].dateTime).getDate()}/{new Date(item.workHistory[0].dateTime).getFullYear()}</div></div>)}
+            {accts.map((item, index)=><div key = {index} className="fourColGrid"><div className="col1">{item.username}</div> <div className="col2">{item.id}</div> <div className="col3">{item.name}</div><div>{(new Date(item.workHistory[0].dateTime).getMonth())+1}/{new Date(item.workHistory[0].dateTime).getDate()}/{new Date(item.workHistory[0].dateTime).getFullYear()}</div></div>)}
         </div>
     )
 }

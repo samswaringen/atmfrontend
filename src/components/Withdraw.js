@@ -22,8 +22,8 @@ function Withdraw() {
         <Card id="withdraw-div">
             <div className="withdraw-title-div"><h2 className = "account-balance">Account Balances</h2></div>
             <div className="account-list-div">
-                <div>Checking {account.balances.checking.map((item, index)=><div className="account-and-balance">{item.acctName}: ${Number(item.balance).toFixed(2)}</div>)}</div>
-                <div >Savings {account.balances.savings.map((item, index)=><div className="account-and-balance">{item.acctName}: ${Number(item.balance).toFixed(2)}</div>)}</div>
+                <div>Checking {account.balances.checking.map((item, index)=><div key = {index} className="account-and-balance">{item.acctName}: ${Number(item.balance).toFixed(2)}</div>)}</div>
+                <div >Savings {account.balances.savings.map((item, index)=><div key = {index} className="account-and-balance">{item.acctName}: ${Number(item.balance).toFixed(2)}</div>)}</div>
             </div>
 
             <button className = "withdraw-btn" onClick = {routeQuick}>Quick Cash</button>

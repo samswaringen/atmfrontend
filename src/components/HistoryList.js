@@ -7,9 +7,9 @@ function HistoryList() {
     return (
         <div>
             {
-                account.accountHistory.map((item)=>
+                account.accountHistory.map((item, index)=>
                     (item.info.type === "withdraw" || item.info.type === "withdraw*QC") ?
-                        <li className = "sevenColGrid" style={{color:'red'}}>
+                        <li key = {index} className = "sevenColGrid" style={{color:'red'}}>
                             <div className= "col1">{(new Date(item.dateTime).getMonth())+1}-{new Date(item.dateTime).getDate()}-{new Date(item.dateTime).getFullYear()}</div>
                             Withdrew 
                             <strong>${item.info.amount}</strong> 
@@ -19,7 +19,7 @@ function HistoryList() {
                             <strong>${Number(item.info.newBalance).toFixed(2)}</strong>
                         </li>
                     : (item.info.type === "deposit") ?
-                        <li className = "sevenColGrid" style={{color:'green'}}>
+                        <li key = {index} className = "sevenColGrid" style={{color:'green'}}>
                             <div>{(new Date(item.dateTime).getMonth())+1}-{new Date(item.dateTime).getDate()}-{new Date(item.dateTime).getFullYear()}</div> 
                             Deposited 
                             <strong>${item.info.amount}</strong> 
@@ -29,7 +29,7 @@ function HistoryList() {
                             <strong>${Number(item.info.newBalance).toFixed(2)}</strong>
                         </li>
                     : (item.info.type === "coin sale") ?
-                        <li className = "sevenColGrid" style={{color:'black'}}>
+                        <li key = {index} className = "sevenColGrid" style={{color:'black'}}>
                             <div>{(new Date(item.dateTime).getMonth())+1}-{new Date(item.dateTime).getDate()}-{new Date(item.dateTime).getFullYear()}</div>
                             {item.info.type} 
                             <strong>${(item.info.amount).toFixed(2)}</strong> 
@@ -39,7 +39,7 @@ function HistoryList() {
                             <strong>${Number(item.info.newBalance).toFixed(2)}</strong>
                         </li>
                     :  (item.info.type === "coin purchase") ?
-                        <li className = "sevenColGrid" style={{color:'black'}}>
+                        <li key = {index} className = "sevenColGrid" style={{color:'black'}}>
                             <div>{(new Date(item.dateTime).getMonth())+1}-{new Date(item.dateTime).getDate()}-{new Date(item.dateTime).getFullYear()}</div>
                             {item.info.type} 
                             <strong>${(item.info.amount).toFixed(2)}</strong> 
@@ -48,7 +48,7 @@ function HistoryList() {
                             New Balance:
                             <strong>${Number(item.info.newBalance).toFixed(2)}</strong>
                         </li>
-                    : <li className = "sevenColGrid" style={{color:'black'}}>
+                    : <li key = {index} className = "sevenColGrid" style={{color:'black'}}>
                         <div>{(new Date(item.dateTime).getMonth())+1}-{new Date(item.dateTime).getDate()}-{new Date(item.dateTime).getFullYear()}</div>
                         {item.info.type} 
                         <strong>from {item.info.acctType}</strong> 

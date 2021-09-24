@@ -88,8 +88,8 @@ function QuickCash() {
         { !isSelected && 
             <>
                 <div className="select-title">Select Account</div>
-                <div className="deposit-account-title">Checking</div> <div>{account.balances.checking.map((item, index)=><div className = "add-account-items" type="button" onClick={()=>selectAccount("checking", index)}><div className = "add-account-items-inner">{item.acctName}: ${Number(item.balance).toFixed(2)}</div></div>)}</div>
-                <div className="deposit-account-title">Savings </div> <div>{account.balances.savings.map((item, index)=><div className = "add-account-items" type="button" onClick={()=>selectAccount("savings", index)}><div className = "add-account-items-inner">{item.acctName}: ${Number(item.balance).toFixed(2)}</div></div>)}</div>
+                <div className="deposit-account-title">Checking</div> <div>{account.balances.checking.map((item, index)=><div key = {index} className = "add-account-items" type="button" onClick={()=>selectAccount("checking", index)}><div className = "add-account-items-inner">{item.acctName}: ${Number(item.balance).toFixed(2)}</div></div>)}</div>
+                <div className="deposit-account-title">Savings </div> <div>{account.balances.savings.map((item, index)=><div key = {index} className = "add-account-items" type="button" onClick={()=>selectAccount("savings", index)}><div className = "add-account-items-inner">{item.acctName}: ${Number(item.balance).toFixed(2)}</div></div>)}</div>
             </>
         }{ isSelected &&
             <>

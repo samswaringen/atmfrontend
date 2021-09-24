@@ -150,7 +150,6 @@ const SignIn = ()=> {
     },[getData])
     
     useEffect(()=>{
-        console.log("here")
     },[getLoading])
     useEffect(()=>{
         if(!empLoading && empData){
@@ -247,22 +246,26 @@ const SignIn = ()=> {
                         return (    
                             <div id="sign-in">
                                 {!getLoading && !empLoading && <>
-                                <h3>Sign In</h3>
-                                <Form>
-                                    <div className= "field-div">
-                                        <Field name="username" type='input' placeholder="Enter Username"></Field>
-                                        <div  className= "error-signin"><div id="username-error"></div><ErrorMessage  name="username" /></div>
-                                    </div>
-                                    <div className= "field-div">
-                                        <Field name="password" type={showPw ? 'text' : 'password'} placeholder="Enter Password"></Field><div id = "showPassSignin" type="button" onClick={showHidden}>Show</div>
-                                        <div className= "error-signin"><ErrorMessage name="password" /></div>
-                                    </div>
-                                    <button className="submit-btn" type="submit" disabled = {!(formik.dirty && formik.isValid) || getLoading || empLoading}>Login</button>
-                                     {!isEmployee && <GoogleLogin />}
-                                </Form>
+                                    <h3>Sign In</h3>
+                                    <Form>
+                                        <div className= "field-div">
+                                            <Field name="username" type='input' placeholder="Enter Username"></Field>
+                                            <div  className= "error-signin"><div id="username-error"></div><ErrorMessage  name="username" /></div>
+                                        </div>
+                                        <div className= "field-div">
+                                            <Field name="password" type={showPw ? 'text' : 'password'} placeholder="Enter Password"></Field><div id = "showPassSignin" type="button" onClick={showHidden}>Show</div>
+                                            <div className= "error-signin"><ErrorMessage name="password" /></div>
+                                        </div>
+                                        <button className="submit-btn" type="submit" disabled = {!(formik.dirty && formik.isValid) || getLoading || empLoading}>Login</button>
+                                        {!isEmployee && <GoogleLogin />}
+                                    </Form>
+                                    </>
+                                }
+                                { getLoading  && <>
+                                    <Loading />
                                 </>
                                 }
-                                { getLoading || empLoading && <>
+                                { empLoading  && <>
                                     <Loading />
                                 </>
                                 }
@@ -273,7 +276,7 @@ const SignIn = ()=> {
             </Formik>
            
         </Card>
-         { isCustomer && <div>Don't have an Account? <div className="create-account-button" type="button" onClick={createAccount}>Create One</div> </div> }
+         { isCustomer && !getLoading && !empLoading && <div>Don't have an Account? <div className="create-account-button" type="button" onClick={createAccount}>Create One</div> </div> }
         </div>
     )
     

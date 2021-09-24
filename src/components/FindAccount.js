@@ -401,7 +401,7 @@ function FindAccount() {
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 {!loading && data &&
-                                                    data.accountNoPW.balances.checking.map(item=><Dropdown.Item onClick={()=>handleAcctSelect("checking",item)}>{item.acctName}</Dropdown.Item>)   
+                                                    data.accountNoPW.balances.checking.map((item,index)=><Dropdown.Item key = {index} onClick={()=>handleAcctSelect("checking",item)}>{item.acctName}</Dropdown.Item>)   
                                                 }
                                             </Dropdown.Menu>
                                         </Dropdown>
@@ -423,7 +423,7 @@ function FindAccount() {
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 {!loading && data &&
-                                                   data.accountNoPW.balances.savings.map(item=><Dropdown.Item onClick={()=>handleAcctSelect("savings",item)}>{item.acctName}</Dropdown.Item>)   
+                                                   data.accountNoPW.balances.savings.map((item,index)=><Dropdown.Item key = {index} onClick={()=>handleAcctSelect("savings",item)}>{item.acctName}</Dropdown.Item>)   
                                                 }
                                             </Dropdown.Menu>
                                         </Dropdown>

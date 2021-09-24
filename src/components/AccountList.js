@@ -1,14 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { AtmObject } from '../App'
-import {Card,Dropdown} from 'react-bootstrap'
-import { useLazyQuery, useMutation,  gql } from "@apollo/client";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { useLazyQuery,  gql } from "@apollo/client";
+
 
 function AccountList() {
-    const atmObject = useContext(AtmObject)
-    const { account, setAccount, isAdmin } = atmObject;
-
-    const history = useHistory()
 
     const [accts, setAccts] = useState([])
 
@@ -107,7 +101,7 @@ function AccountList() {
 
     useEffect(()=>{
         accounts()
-    },[])
+    })
 
     useEffect(()=>{
         if(!loading && data){
@@ -117,7 +111,7 @@ function AccountList() {
 
     return (
         <div>
-            {accts.map((item)=><div className="fourColGrid"><div classname="col1">{item.username}</div><div classname="col2">{item.id}</div> <div classname="col3">{item.routing}</div><div>{(new Date(item.accountHistory[0].dateTime).getMonth())+1}/{new Date(item.accountHistory[0].dateTime).getDate()}/{new Date(item.accountHistory[0].dateTime).getFullYear()}</div></div>)}
+            {accts.map((item, index)=><div key ={index} className="fourColGrid"><div classname="col1">{item.username}</div><div classname="col2">{item.id}</div> <div classname="col3">{item.routing}</div><div>{(new Date(item.accountHistory[0].dateTime).getMonth())+1}/{new Date(item.accountHistory[0].dateTime).getDate()}/{new Date(item.accountHistory[0].dateTime).getFullYear()}</div></div>)}
         </div>
     )
 }

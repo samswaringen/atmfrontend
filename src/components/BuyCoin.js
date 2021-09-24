@@ -1,6 +1,5 @@
 import React, {useContext, useState} from 'react'
 import { AtmObject } from '../App'
-import { useHistory } from 'react-router-dom';
 import {Modal, Button} from 'react-bootstrap'
 import { useMutation,  gql } from "@apollo/client";
 import { makeid } from './idgenerator';
@@ -10,7 +9,6 @@ function BuyCoin({ coin, wallet, walletIndex }) {
     const {account, setAccount} = atmObject;
 
     const [clicked, setClicked] = useState(false)
-    const [isFiat, setIsFiat] = useState(true)
     const [price, setPrice] = useState(0)
     const [coinAmount, setCoinAmount] = useState(0)
     const [buyValue, setBuyValue] = useState(0)
@@ -18,8 +16,6 @@ function BuyCoin({ coin, wallet, walletIndex }) {
     const [accountFrom, setAccountFrom] = useState()
     const [accountSelected, setAccountSelected] = useState(false)
     const [accountIndex, setAccountIndex] = useState(0)
-
-    const history = useHistory();
 
     const ADD_COIN = gql`
     mutation ADD_COIN($id: String, $walletName: String, $coinName: String, $coinID: String, $balance: Float, $coinTransID: String, $dateTime: String, $type: String, $amount: Float) {
@@ -180,9 +176,9 @@ function BuyCoin({ coin, wallet, walletIndex }) {
 
             <Modal.Body>
                 {!isConfirm ? <>
-                {`Available Funds in checking Accounts:`}{account.balances.checking.map((item, index)=><div><input type="checkbox" id={item.acctNumber} onChange={()=>handleCheckBox(item, index)}></input><label>{item.acctName} ${item.balance}</label></div>)}
+                {`Available Funds in checking Accounts:`}{account.balances.checking.map((item, index)=><div key = {index}><input type="checkbox" id={item.acctNumber} onChange={()=>handleCheckBox(item, index)}></input><label>{item.acctName} ${item.balance}</label></div>)}
                 <input id = 'purchase-input' type='number' placeholder='Enter Amount' onChange={handlePurchase}></input>
-                {isFiat ? <div>{`Total ${coin.id}: ${coinAmount}`}</div> : <div></div>}
+                <div>{`Total ${coin.id}: ${coinAmount}`}</div>
                 </> :
                  <>
                     Are you sure you want to purchase {coinAmount} of {coin.name} at ${Number(coin.priceUsd).toFixed(2)}/per from {accountFrom.acctName} {accountFrom.acctNumber}

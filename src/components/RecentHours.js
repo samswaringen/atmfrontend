@@ -6,7 +6,7 @@ function RecentHours() {
     const { account, employee} = atmObject
     return (
         <div>
-            {employee.workHistory.map((item,index)=><div>Clock {item.type} on {(new Date(item.dateTime).getMonth())+1}-{new Date(item.dateTime).getDate()}-{new Date(item.dateTime).getFullYear()} at {new Date(item.dateTime).getHours()}:{new Date(item.dateTime).getMinutes()}:{new Date(item.dateTime).getSeconds()}</div>)}
+            {employee.workHistory.map((item,index)=><div key = {index}>Clock {item.type} on {(new Date(item.dateTime).getMonth())+1}-{new Date(item.dateTime).getDate()}-{new Date(item.dateTime).getFullYear()} at {new Date(item.dateTime).getHours()}:{new Date(item.dateTime).getMinutes()}:{new Date(item.dateTime).getSeconds()}</div>)}
         </div>
     )
 }

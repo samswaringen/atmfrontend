@@ -194,7 +194,6 @@ function CreateAccount() {
     }
 
     const onSubmit = (values)=>{
-        console.log("values:",values)
         let id = makeid(15)
         let empId = makeid(20)
         let newRouting = routing + routingEq

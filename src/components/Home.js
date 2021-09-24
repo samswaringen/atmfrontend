@@ -9,7 +9,7 @@ import superagent from 'superagent'
 
 function Home() {
     const atmObject = useContext(AtmObject);
-    const { account, user, isVerified, isEmployee, setIsEmployee, isATM} = atmObject
+    const { account, isVerified, setIsEmployee, isATM} = atmObject
 
     let history = useHistory()
 
@@ -106,10 +106,8 @@ function Home() {
                                             <div className="col3">Coin Name</div>
                                             <div className="col4">Balance</div>              
                                         </div>
-                                            {item.coins.map((coin)=>
-                                                <>{
-                                                    <div className='balance-amount'>
-                                                        
+                                            {item.coins.map((coin, index)=>
+                                                    <div key = {index} className='balance-amount'>
                                                         <div className="fourColGrid">
                                                             <div className="col2">{coin.id}</div>
                                                             <div className="col3">{coin.coinName}</div>  
@@ -117,7 +115,6 @@ function Home() {
                                                             
                                                         </div>
                                                     </div>
-                                                }</>
                                             )}
                                         </div>
                                     )}

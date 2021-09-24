@@ -1,7 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useState} from 'react'
-import temple from './temple.png'
 import Withdraw from './components/Withdraw'
 import Deposit from './components/Deposit'
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
@@ -109,6 +108,9 @@ function ATM() {
                                         <Redirect to="/components/Home" />
                                     </Route>
                                     <Route exact path="/">
+                                        <Redirect to="/components/Home" />
+                                    </Route>
+                                    <Route exact path="/components/Home">
                                         <Redirect to="/components/Home" />
                                     </Route>
                                     <Route path="/components/EmployeeHome">

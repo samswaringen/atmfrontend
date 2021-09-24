@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "dotenv-webpack": "^7.0.3",
     "ocr-space-api-wrapper": "^1.0.6"
   }
 }

@@ -133,7 +133,7 @@ function SellCoin({ coinData, coin, wallet, setIsLoading, walletIndex }) {
                 </Modal.Header>
 
                 <Modal.Body>
-                {`Accounts:`}{account.balances.checking.map((item, index)=><div><input type="checkbox" id={item.acctNumber} onChange={()=>handleCheckBox(item, index)}></input><label>{item.acctName} ${item.balance}</label></div>)}
+                {`Accounts:`}{account.balances.checking.map((item, index)=><div key = {index}><input type="checkbox" id={item.acctNumber} onChange={()=>handleCheckBox(item, index)}></input><label>{item.acctName} ${item.balance}</label></div>)}
                 <input id = 'sell-input' type='number' placeholder='Enter Amount' onChange={handleSale}></input>
                 <div>{`Total USD: ${capitalAmount}`}</div>
                 </Modal.Body>
