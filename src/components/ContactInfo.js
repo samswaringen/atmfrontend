@@ -123,6 +123,7 @@ function ContactInfo() {
     }
 
     const onSubmit = async(values)=>{
+        await editAccountPin({variables:{id: account.id, pin: String(values.pin)}})
         await editContactInfo({variables:{id: account.id,
             firstName: values.firstName,
             lastName: values.lastName,
@@ -136,7 +137,6 @@ function ContactInfo() {
             billingState: values.billingState,
             billingZip: Number(values.billingZip)  
         }})
-        await editAccountPin({variables:{id:account.id, pin: String(values.pin)}})
         setAccount(account, account.contact = {
                 firstName: values.firstName,
                 lastName: values.lastName,

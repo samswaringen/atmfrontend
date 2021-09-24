@@ -42,7 +42,7 @@ function HistoryList() {
                         <li key = {index} className = "sevenColGrid" style={{color:'black'}}>
                             <div>{(new Date(item.dateTime).getMonth())+1}-{new Date(item.dateTime).getDate()}-{new Date(item.dateTime).getFullYear()}</div>
                             {item.info.type} 
-                            <strong>${(item.info.amount).toFixed(2)}</strong> 
+                            <strong>{Number(item.info.amount).toFixed(2)}</strong> 
                             <strong>from {item.info.acctType}</strong> 
                             <strong>{item.info.acctNumber}</strong> 
                             New Balance:

@@ -147,7 +147,7 @@ function AddAccount() {
 
     useEffect(()=>{
         numberGen({variables:{id:"accounts"}})
-    })
+    },[])
 
     useEffect(()=>{
         if(!numLoading && numData){
@@ -161,9 +161,7 @@ function AddAccount() {
                 setDebitNumber(numData.numberGen.number)
                 setDebitEq(numData.numberGen.equation)
             }
-        }
-
-        
+        }    
     },[numData])
 
     useEffect(()=>{
@@ -195,8 +193,6 @@ function AddAccount() {
                 break;
             case "coinWallets":
                 setIsCoinWallet(true)
-                break;
-            default:
                 break;
         }
     }
@@ -314,8 +310,7 @@ function AddAccount() {
                         setAccount(account, account.balances.savings.push({ acctName: accountName, acctNumber : newAcctNumber, acctType: acctLevel, balance : 0, interestRate : 0.25}))
                         history.push('/components/Success')
                         break;
-                    default:
-                        break;
+                    
                 }
                 break;
             case "cards":
@@ -336,8 +331,7 @@ function AddAccount() {
                         setAccount(account, account.balances.cards.push({acctName: accountName, cardNumber: newCreditNumber, acctLink: accountNumForLink, acctType: acctLevel, exp: exp, CVV: cvv, pin: Number(pin), balance: balanceAllowed, totalBalance: balanceAllowed}))
                         history.push('/components/Success')
                         break;
-                    default:
-                        break;
+                    
                 }
                 break;
             case "investment":
@@ -348,8 +342,7 @@ function AddAccount() {
                         break;
                     case "ultra":
                         break;
-                    default:
-                        break;
+                    
                 }
                 break;
             case "coinWallets":

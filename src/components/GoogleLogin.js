@@ -183,11 +183,12 @@ function GoogleLogin() {
 
   useEffect(()=>{
     if(!emailLoading && emailData){
+      setAccount(emailData.accountByEmail)
+      setIsVerified(true)
         if(emailData.accountByEmail.contact.firstName === null){
             history.push("/components/ContactInfo")
         }
-        setAccount(emailData.accountByEmail)
-        setIsVerified(true)
+
     }
 },[emailData])
 

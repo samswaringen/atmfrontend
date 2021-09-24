@@ -101,7 +101,7 @@ function AccountList() {
 
     useEffect(()=>{
         accounts()
-    })
+    },[])
 
     useEffect(()=>{
         if(!loading && data){
