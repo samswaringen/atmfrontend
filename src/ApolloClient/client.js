@@ -6,7 +6,7 @@ const cookies = new Cookies();
 
 
 const httpLink = new HttpLink({
-  uri: "https://atm-graphql-server.herokuapp.com/graphql",
+  uri: process.env.REACT_APP_GRAPHQL_SERVER,
   //uri: "http://localhost:9001/graphql"
 });
 
