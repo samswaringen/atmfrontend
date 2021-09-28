@@ -6,7 +6,7 @@ const cookies = new Cookies();
 
 
 const httpLink = new HttpLink({
-  uri: process.env.REACT_APP_GRAPHQL_SERVER,
+  uri: process.env.REACT_APP_GRAPHQL_SERVER
   //uri: "http://localhost:9001/graphql"
 });
 

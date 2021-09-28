@@ -131,27 +131,6 @@ function GoogleLogin() {
     }
     `;
 
-    const EDIT_NUM =gql`
-        mutation EDIT_NUM(
-            $id: String!,
-            $number: Float!,
-            $equation: Int!
-        ){
-        editNumberGen(id: $id, input:{
-            id: $id,
-            number: $number,
-            equation: $equation
-            }){
-                id
-                number
-                equation
-            }
-        }
-    `;
-
-
-    const [editNumberGen,{loading: editLoading, error: editError, data: editData}] = useMutation(EDIT_NUM)
-
     const [accountByEmail,{ loading: emailLoading, error : emailError, data: emailData }] = useLazyQuery(GET_ONE_GOOGLE,{
       fetchPolicy: "no-cache"
     });
@@ -159,6 +138,7 @@ function GoogleLogin() {
     useEffect(()=>{
       superagent
           .post("https://atm-auth-server.herokuapp.com/number")
+          //.post('http://localhost:9002/number')
           .send({id:"accounts"})
           .end(function (err, res) {
               if (err) {
@@ -170,11 +150,13 @@ function GoogleLogin() {
           })
       superagent
           .post("https://atm-auth-server.herokuapp.com/number")
+          //.post('http://localhost:9002/number')
           .send({id:"routing"})
           .end(function (err, res) {
               if (err) {
                 console.log(err);
               } else {
+                  console.log("routing",res.body.number)
                   setRouting(res.body.number)
                   setRoutingEq(res.body.equation)
               }
@@ -241,6 +223,8 @@ function GoogleLogin() {
   const createGoogleAccount = (email)=>{
     console.log("creating account from google")
     let id = makeid(15)
+    console.log("numbers",routing, acctNumber)
+    console.log("equations",routingEq, acctNumberEq)
     let newRouting = routing + routingEq
     let newChecking = acctNumber + acctNumberEq
     let newSavings = newChecking + 1
@@ -269,8 +253,6 @@ function GoogleLogin() {
                   let tokenArr = res.body.accessToken.split('.')
                   cookies.set("tokenHead", `${tokenArr[0]}.${tokenArr[1]}`, {path: "/", sameSite: 'strict'})
                   cookies.set('tokenSig', tokenArr[2], {path: "/", sameSite: 'strict', secure: true})
-                  editNumberGen({variables:{id: "accounts", number: newSavings, equation: acctNumberEq}})
-                  editNumberGen({variables:{id: "routing", number: newRouting, equation: routingEq}})
                   accountByEmail({variables :{email:email}})
               }
 

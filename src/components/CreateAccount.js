@@ -121,27 +121,6 @@ function CreateAccount() {
     }
     `;
 
-    
-    const EDIT_NUM =gql`
-        mutation EDIT_NUM(
-            $id: String!,
-            $number: Float!,
-            $equation: Int!
-        ){
-        editNumberGen(id: $id, input:{
-            id: $id,
-            number: $number,
-            equation: $equation
-            }){
-                id
-                number
-                equation
-            }
-        }
-    `;
-
-
-    const [editNumberGen,{loading: editLoading, error: editError, data: editData}] = useMutation(EDIT_NUM)
     const [accountNoPW,{ loading, error, data }] = useLazyQuery(GET_ONE,{
         fetchPolicy: "no-cache"
         }); 
@@ -159,6 +138,7 @@ function CreateAccount() {
         }
         superagent
             .post("https://atm-auth-server.herokuapp.com/number")
+            //.post('http://localhost:9002/number')
             .send({id:"accounts"})
             .end(function (err, res) {
                 if (err) {
@@ -170,6 +150,7 @@ function CreateAccount() {
             })
         superagent
             .post("https://atm-auth-server.herokuapp.com/number")
+            //.post('http://localhost:9002/number')
             .send({id:"routing"})
             .end(function (err, res) {
                 if (err) {
@@ -239,8 +220,6 @@ function CreateAccount() {
                 if (err) {
                   console.log(err);
                 } else {
-                    editNumberGen({variables:{id: "accounts", number: newSavings, equation: acctNumberEq }})
-                    editNumberGen({variables:{id: "routing", number: newRouting, equation: routingEq}})
                     accountNoPW({variables: {username: res.req._data.input.username}})
                     
                 }
@@ -252,6 +231,7 @@ function CreateAccount() {
             setSelectedDiv('online banking-nav-div')
             superagent
             .post("https://atm-auth-server.herokuapp.com/createuser")
+            //.post('http://localhost:9002/createuser')
             .send({input})
             .end(function (err, res) {
                 if (err) {
@@ -260,8 +240,6 @@ function CreateAccount() {
                     let tokenArr = res.body.accessToken.split('.')
                     cookies.set("tokenHead", `${tokenArr[0]}.${tokenArr[1]}`, {path: "/", sameSite: 'strict'})
                     cookies.set('tokenSig', tokenArr[2], {path: "/", sameSite: 'strict', secure: true})
-                    editNumberGen({variables:{id: "accounts", number: newSavings, equation: acctNumberEq}})
-                    editNumberGen({variables:{id: "routing", number: newRouting, equation: routingEq}})
                     history.push('/components/Success') 
                 }
  
